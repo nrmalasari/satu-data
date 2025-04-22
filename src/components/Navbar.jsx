@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -30,13 +31,13 @@ const Navbar = () => {
 
   return (
     <div 
-        className={`fixed top-0 left-0 right-0 bg-gradient-to-r from-indigo-50 to-purple-50 z-[1000] transition-all duration-300 ${
-          isScrolled ? 'shadow-md' : ''
-        }`}
-        style={{
-          height: '100px'
-        }}
-      >
+      className={`fixed top-0 left-0 right-0 bg-gradient-to-r from-indigo-50 to-purple-50 z-[1000] transition-all duration-300 ${
+        isScrolled ? 'shadow-md' : ''
+      }`}
+      style={{
+        height: '100px'
+      }}
+    >
       {/* Floating shadow */}
       <div className="absolute inset-x-0 bottom-0 h-4 bg-gradient-to-t from-purple-100/70 to-transparent" />
       
@@ -44,9 +45,9 @@ const Navbar = () => {
         <div className="flex items-center justify-between py-0">
           {/* Logo */}
           <div className="logo">
-            <h1 className="text-x1 font-bold uppercase leading-tight text-black">
+            <Link to="/" className="text-x1 font-bold uppercase leading-tight text-black">
               SATU<br />DATA
-            </h1>
+            </Link>
           </div>
 
           {/* Desktop Menu */}
@@ -59,21 +60,21 @@ const Navbar = () => {
                   onMouseEnter={() => handleDropdownHover('metadata')}
                   onMouseLeave={handleDropdownLeave}
                 >
-                  <div className="font-bold text-indigo-800 hover:text-purple-600 transition-colors duration-200 flex items-center cursor-pointer">
+                  <Link to="/metadata" className="font-bold text-indigo-800 hover:text-purple-600 transition-colors duration-200 flex items-center cursor-pointer">
                     Metadata
                     <i className={`ri-arrow-down-s-line ml-1 transition-transform duration-200 ${activeDropdown === 'metadata' ? 'rotate-180' : ''}`}></i>
-                  </div>
+                  </Link>
                   <div 
                     className={`absolute top-full left-0 mt-2 w-48 bg-white rounded-[20px] shadow-lg py-2 z-20 transition-all duration-300 origin-top ${activeDropdown === 'metadata' ? 'scale-y-100 opacity-100' : 'scale-y-95 opacity-0 pointer-events-none'}`}
                   >
                     {[2021, 2022, 2023, 2024].map(year => (
-                      <a
+                      <Link
                         key={year}
-                        href="#"
+                        to={`/metadata?year=${year}`}
                         className="block px-4 py-2 text-indigo-800 hover:bg-purple-50 hover:text-purple-600 transition-colors duration-150"
                       >
                         METADATA {year}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </li>
@@ -161,9 +162,9 @@ const Navbar = () => {
       >
         <div className="p-8 h-full flex flex-col">
           <div className="flex justify-between items-center mb-12">
-            <h1 className="text-xl font-bold uppercase text-black">
+            <Link to="/" className="text-xl font-bold uppercase text-black">
               SATU<br />DATA
-            </h1>
+            </Link>
             <button 
               onClick={toggleMenu} 
               className="text-3xl focus:outline-none text-indigo-800 hover:text-purple-600 transition-colors"
@@ -173,30 +174,15 @@ const Navbar = () => {
           </div>
           
           <ul className="space-y-6">
-            {/* Mobile Metadata Dropdown */}
+            {/* Mobile Metadata Link */}
             <li>
-              <button 
-                onClick={() => setActiveDropdown(activeDropdown === 'metadata' ? null : 'metadata')}
-                className="w-full flex justify-between items-center py-3 text-lg font-medium text-indigo-800 border-b border-indigo-100 hover:text-purple-600 transition-colors duration-200"
+              <Link 
+                to="/metadata"
+                className="block py-3 text-lg font-medium text-indigo-800 border-b border-indigo-100 hover:text-purple-600 transition-colors duration-200"
+                onClick={toggleMenu}
               >
                 Metadata
-                <i className={`ri-arrow-down-s-line transition-transform duration-200 ${activeDropdown === 'metadata' ? 'rotate-180' : ''}`}></i>
-              </button>
-              <div 
-                className={`overflow-hidden transition-all duration-300 ${activeDropdown === 'metadata' ? 'max-h-96' : 'max-h-0'}`}
-              >
-                <div className="ml-4 mt-2 space-y-2">
-                  {[2021, 2022, 2023, 2024].map(year => (
-                    <a
-                      key={year}
-                      href="#"
-                      className="block py-2 pl-4 text-indigo-700 hover:text-purple-600 transition-colors duration-150"
-                    >
-                      METADATA {year}
-                    </a>
-                  ))}
-                </div>
-              </div>
+              </Link>
             </li>
 
             {/* Mobile Dokumen Statistik Dropdown */}

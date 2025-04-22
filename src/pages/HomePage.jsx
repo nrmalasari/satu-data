@@ -72,8 +72,8 @@ const HomePage = () => {
 
   return (
     <Layout>
-      {/* Hero Section - Modern Design */}
-      <section className="relative min-h-screen lg:h-[800px] bg-gradient-to-br from-[#e8f1ff] to-[#d6e6ff] overflow-hidden">
+      {/* Section  */}
+      <section className="relative h-[600px] md:h-[700px] lg:h-[800px] bg-gradient-to-br from-[#e8f1ff] to-[#d6e6ff] overflow-hidden pt-20 lg:pt-0">
         {/* Animated background elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
           <div className="absolute top-20 left-10 w-64 h-64 bg-[#51c3f2] rounded-full filter blur-[80px] opacity-20 animate-float"></div>
@@ -81,9 +81,9 @@ const HomePage = () => {
         </div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between h-full pt-16 lg:pt-0">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between h-full pt-12 lg:pt-0">
             {/* Left Column - Title */}
-            <div className="w-full lg:w-1/2 mb-10 lg:mb-0 z-10">
+            <div className="w-full lg:w-1/2 mb-10 lg:mb-0 z-10 mt-10 lg:mt-0">
               <h1 className="text-4xl sm:text-5xl lg:text-[64px] font-extrabold leading-tight lg:leading-[80px] text-[#02033b] tracking-tight">
                 Satu Data <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9]">
@@ -96,7 +96,7 @@ const HomePage = () => {
                 Cepat Akurat dan Bisa Diakses Dimana Saja
               </p>
               
-              {/* Search Box - Modern Style */}
+              {/* Search Box */}
               <div className="mt-8 sm:mt-10 w-full max-w-md relative group">
                 <div className="absolute inset-0 bg-white rounded-xl border border-gray-200 shadow-lg group-hover:shadow-xl transition-all duration-300"></div>
                 <input 
@@ -144,7 +144,7 @@ const HomePage = () => {
         </div>
 
         {/* Stats Section - Modern Design - Adjusted spacing */}
-        <div className="container mx-auto px-4 sm:px-6 lg:absolute lg:bottom-2 lg:left-0 lg:right-0 z-10 mt-12 lg:mt-0">
+        <div className="container mx-auto px-4 sm:px-6 lg:absolute lg:bottom-2 lg:left-0 lg:right-0 z-10 mt-8 sm:mt-12 lg:mt-0">
           <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-6 max-w-4xl mx-auto grid grid-cols-3 gap-4 border border-white/20">
             {[
               { value: 500, label: "Total Dataset" },
