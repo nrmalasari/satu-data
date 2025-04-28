@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import Layout from "../components/Layout";
 import CountUp from 'react-countup';
+import { motion } from "framer-motion";
 import axios from 'axios';
 
 const HomePage = () => {
@@ -233,61 +234,92 @@ const HomePage = () => {
 
       {/* Data Sektor Section - Modern Grid */}
       <section className="py-16 sm:py-20 lg:py-28 bg-gradient-to-b from-white to-[#f8fafd]">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="text-center mb-12 sm:mb-16">
-            <div className="inline-flex items-center mb-4">
-              <div className="w-3 h-10 bg-gradient-to-b from-[#e18335] to-[#f6c041] rounded-full mr-4"></div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#02033b]">
-                Jelajahi Data <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9]">Berdasarkan Sektor</span>
-              </h2>
-            </div>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Temukan data yang Anda butuhkan berdasarkan kategori sektor tertentu
-            </p>
+      <div className="container mx-auto px-4 sm:px-6">
+        {/* Judul tanpa animasi */}
+        <div className="text-center mb-12 sm:mb-16">
+          <div className="inline-flex items-center mb-4">
+            <div className="w-3 h-10 bg-gradient-to-b from-[#e18335] to-[#f6c041] rounded-full mr-4"></div>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#02033b]">
+              Jelajahi Data <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9]">Berdasarkan Sektor</span>
+            </h2>
           </div>
-          
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
-            {(showAllSectors ? sektorData : sektorData.slice(0, 10)).map((item, index) => (
-              <div 
-                key={index} 
-                className="bg-white rounded-xl border border-gray-100 p-4 sm:p-5 flex flex-col items-center hover:shadow-lg transition-all hover:-translate-y-2 hover:border-transparent group relative overflow-hidden"
-              >
-                {/* Hover effect background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#51c3f2]/10 to-[#f6c041]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                
-                <div className="w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 rounded-2xl mb-4 overflow-hidden flex items-center justify-center p-3 sm:p-4 relative z-10">
-                  <img 
-                    src={item.image} 
-                    alt={item.name}
-                    className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
-                  />
-                </div>
-                <h3 className="text-center text-sm sm:text-base font-medium text-[#02033b] group-hover:text-[#51c3f2] transition-colors relative z-10">
-                  {item.name}
-                </h3>
-              </div>
-            ))}
-          </div>
-          
-          <div className="mt-12 sm:mt-16 text-center">
-            <button 
-              onClick={() => setShowAllSectors(!showAllSectors)}
-              className="px-8 py-3 bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] hover:from-[#3a9ec9] hover:to-[#2a8bb7] text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 inline-flex items-center text-base"
-            >
-              {showAllSectors ? 'Sembunyikan Beberapa Sektor' : 'Lihat Semua Sektor'}
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                className={`h-5 w-5 ml-2 transition-transform ${showAllSectors ? 'rotate-180' : ''}`} 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-          </div>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Temukan data yang Anda butuhkan berdasarkan kategori sektor tertentu
+          </p>
         </div>
-      </section>
+        
+        {/* Grid Sektor dengan animasi muncul setiap scroll */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+          {(showAllSectors ? sektorData : sektorData.slice(0, 10)).map((item, index) => (
+            <motion.div 
+              key={index}
+              initial={{ opacity: 0, y: 50, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: false, margin: "-50px" }}
+              transition={{ 
+                duration: 0.8,
+                delay: index * 0.1,
+                ease: "backOut"
+              }}
+              whileHover={{ 
+                y: -8,
+                scale: 1.03,
+                transition: { duration: 0.3 }
+              }}
+              className="bg-white rounded-xl border border-gray-100 p-4 sm:p-5 flex flex-col items-center hover:shadow-lg hover:border-transparent group relative overflow-hidden"
+            >
+              {/* Hover effect background */}
+              <motion.div 
+                className="absolute inset-0 bg-gradient-to-br from-[#51c3f2]/15 to-[#f6c041]/15 opacity-0 group-hover:opacity-100"
+                transition={{ duration: 0.4 }}
+              />
+              
+              <div className="w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 rounded-2xl mb-4 overflow-hidden flex items-center justify-center p-3 sm:p-4 relative z-10">
+                <motion.img 
+                  src={item.image} 
+                  alt={item.name}
+                  className="w-full h-full object-contain"
+                  whileHover={{ scale: 1.15 }}
+                  transition={{ duration: 0.4 }}
+                />
+              </div>
+              <h3 className="text-center text-sm sm:text-base font-medium text-[#02033b] group-hover:text-[#51c3f2] transition-colors relative z-10">
+                {item.name}
+              </h3>
+            </motion.div>
+          ))}
+        </div>
+        
+        {/* Tombol dengan animasi muncul setiap scroll */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false }}
+          transition={{ 
+            delay: 0.8, 
+            duration: 0.8,
+            ease: "backOut"
+          }}
+          className="mt-12 sm:mt-16 text-center"
+        >
+          <button 
+            onClick={() => setShowAllSectors(!showAllSectors)}
+            className="px-8 py-3 bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] hover:from-[#3a9ec9] hover:to-[#2a8bb7] text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 inline-flex items-center text-base"
+          >
+            {showAllSectors ? 'Sembunyikan Beberapa Sektor' : 'Lihat Semua Sektor'}
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              className={`h-5 w-5 ml-2 transition-transform ${showAllSectors ? 'rotate-180' : ''}`} 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+        </motion.div>
+      </div>
+    </section>
     </Layout>
   );
 };
