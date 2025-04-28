@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FiSearch, FiDownload, FiEye, FiChevronRight, FiFilter, FiX } from "react-icons/fi";
 import Layout from "../components/Layout";
 
 const MetadataPage = () => {
@@ -10,6 +11,7 @@ const MetadataPage = () => {
       date: "6 March, 2025",
       source: "Dinas Komunikasi dan Informatika",
       views: 1896,
+      downloads: 842,
       type: "PDF",
       year: 2024,
       sector: "TEKNOLOGI INFORMASI"
@@ -20,6 +22,7 @@ const MetadataPage = () => {
       date: "2 December, 2021",
       source: "Dinas Kesehatan",
       views: 1896,
+      downloads: 721,
       type: "DOCX",
       year: 2021,
       sector: "KESEHATAN"
@@ -30,6 +33,7 @@ const MetadataPage = () => {
       date: "15 January, 2023",
       source: "BAPPEDA",
       views: 2453,
+      downloads: 1102,
       type: "PDF",
       year: 2023,
       sector: "EKONOMI"
@@ -40,6 +44,7 @@ const MetadataPage = () => {
       date: "3 May, 2022",
       source: "BAPPEDA",
       views: 1789,
+      downloads: 893,
       type: "XLSX",
       year: 2022,
       sector: "SOSIAL"
@@ -50,6 +55,7 @@ const MetadataPage = () => {
       date: "10 February, 2024",
       source: "Dinas Pertanian",
       views: 1250,
+      downloads: 567,
       type: "PDF",
       year: 2024,
       sector: "PERTANIAN"
@@ -60,6 +66,7 @@ const MetadataPage = () => {
       date: "22 March, 2023",
       source: "Dinas Pendidikan",
       views: 2100,
+      downloads: 978,
       type: "PDF",
       year: 2023,
       sector: "PENDIDIKAN"
@@ -179,329 +186,255 @@ const MetadataPage = () => {
 
   return (
     <Layout>
-      <div className="bg-[#f3f8ff] min-h-screen pb-20">
-        {/* Header Section */}
-        <div className="pt-28 pb-12 text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-[#02033b]">
-            METADATA
-          </h1>
-          <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-            Temukan dataset terbuka dari berbagai organisasi pemerintah daerah
-          </p>
-        </div>
-
-        {/* Search Section */}
-        <div className="max-w-4xl mx-auto px-4 mb-12">
-            <div className="relative flex bg-white rounded-full shadow-lg border border-gray-200">
-                {/* File Type Dropdown */}
-                <div className="relative group">
-                <button className="flex items-center justify-between px-4 h-14 rounded-l-full bg-[#51c3f2] text-white font-medium focus:outline-none">
-                    <span>All</span>
-                    <svg 
-                    className="w-5 h-5 ml-2 transition-transform duration-200 group-hover:rotate-180" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    viewBox="0 0 24 24"
-                    >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                </button>
-                
-                {/* Dropdown Menu */}
-                <div className="absolute left-0 mt-1 w-40 bg-white rounded-lg shadow-xl z-10 hidden group-hover:block">
-                    <div className="py-1">
-                    {['PDF', 'DOCX', 'XLSX', 'CSV', 'JSON', 'XML'].map((type) => (
-                        <button
-                        key={type}
-                        className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                        onClick={() => {
-                            setSearchTerm(type);
-                        }}
-                        >
-                        {type}
-                        </button>
-                    ))}
-                    </div>
-                </div>
-                </div>
-
-                {/* Search Input */}
-                <input
-                type="text"
-                placeholder="Cari dataset"
-                className="flex-1 h-14 pl-4 pr-14 focus:outline-none text-gray-700"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                
-                {/* Search Icon */}
-                <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                <svg 
-                    className="w-6 h-6 text-gray-400" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    viewBox="0 0 24 24"
-                >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                </div>
-            </div>
-        </div>
-        {/* Filters Section */}
-        <div className="max-w-7xl mx-auto px-4">
-          {/* Mobile Filters Button */}
-          <div className="lg:hidden mb-4">
-            <button 
-              className="w-full flex justify-between items-center bg-white rounded-lg shadow-md p-4"
-              onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
-            >
-              <span className="font-medium">Filters</span>
-              <span className="text-gray-500">
-                {filteredItems.length} items
-              </span>
-            </button>
+      <div className="bg-gradient-to-b from-[#e8f1ff] to-[#d6e6ff] min-h-screen pb-20">
+        {/* Header Section - Modern Gradient */}
+        <div className="bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] pt-40 pb-18 text-center text-white relative overflow-hidden">
+          {/* Background elements */}
+          <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
+            <div className="absolute top-20 left-10 w-64 h-64 bg-[#51c3f2] rounded-full filter blur-[80px] opacity-20 animate-float"></div>
+            <div className="absolute bottom-10 right-20 w-80 h-80 bg-[#f6c041] rounded-full filter blur-[100px] opacity-15 animate-float-delay"></div>
           </div>
+          
+          <div className="max-w-4xl mx-auto px-4 relative z-10">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+              METADATA
+            </h1>
+            <p className="text-lg opacity-90 leading-relaxed">
+              Temukan dataset terbuka dari berbagai organisasi pemerintah daerah dengan metadata terstruktur
+            </p>
+          </div>
+        </div>
 
-          <div className="flex flex-col lg:flex-row gap-8">
-            {/* Left Sidebar - Filters */}
-            <div className={`w-full lg:w-1/4 bg-white rounded-2xl shadow-xl p-6 h-fit lg:sticky lg:top-4 ${mobileFiltersOpen ? 'block' : 'hidden lg:block'}`}>
-              {/* Organisasi Filter */}
-              <div className="mb-8">
-                <div className="flex items-center mb-4">
-                  <div className="w-1 h-6 bg-[#e18335] rounded-full mr-3"></div>
-                  <h3 className="font-semibold text-lg">Organisasi</h3>
+        {/* Search Section - Modern Design */}
+        <div className="max-w-5xl mx-auto px-4 -mt-8 mb-8 relative z-10">
+          <div className="relative bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-shadow group">
+            <div className="absolute left-5 top-1/2 transform -translate-y-1/2">
+              <FiSearch className="text-gray-400 text-xl" />
+            </div>
+            <input
+              type="text"
+              placeholder="Cari dataset, organisasi, atau jenis file..."
+              className="w-full h-14 pl-12 pr-32 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#3a9ec9] text-gray-700 placeholder-gray-400 text-base"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex space-x-2">
+              <button 
+                className="bg-gradient-to-r from-[#f6c041] to-[#e18335] text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center transition-all hover:shadow-md"
+                onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
+              >
+                <FiFilter className="mr-2" /> Filter
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row gap-6">
+            {/* Left Sidebar - Filters - Modern Design */}
+            <div className={`w-full lg:w-1/4 ${mobileFiltersOpen ? 'block' : 'hidden lg:block'}`}>
+              <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6 sticky top-4">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="font-bold text-[#02033b] text-lg">Filters</h3>
+                  <button 
+                    onClick={resetFilters}
+                    className="text-[#3a9ec9] text-sm font-medium hover:underline"
+                  >
+                    Reset All
+                  </button>
                 </div>
-                
-                {/* Organization search */}
-                <div className="mb-4">
-                  <div className="relative">
+
+                {/* Organisasi Filter */}
+                <div className="mb-6">
+                  <h4 className="font-medium text-[#02033b] mb-3">Organisasi</h4>
+                  <div className="relative mb-3">
                     <input
                       type="text"
                       placeholder="Cari organisasi..."
-                      className="w-full h-10 pl-4 pr-10 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#51c3f2] focus:border-transparent text-sm"
+                      className="w-full h-10 pl-3 pr-8 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#3a9ec9] focus:border-transparent text-sm"
                       value={orgSearchTerm}
                       onChange={(e) => setOrgSearchTerm(e.target.value)}
                     />
-                    <div className="absolute right-3 top-2.5">
-                      <svg 
-                        className="w-5 h-5 text-gray-400" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                      </svg>
-                    </div>
+                    <FiSearch className="absolute right-2.5 top-2.5 text-gray-400" />
+                  </div>
+                  <div className="max-h-60 overflow-y-auto pr-2 space-y-2 custom-scrollbar">
+                    {filteredOrgs.map((org, index) => (
+                      <div key={index} className="flex items-center">
+                        <input 
+                          type="checkbox" 
+                          id={`org-${index}`}
+                          className="w-4 h-4 rounded border-gray-300 text-[#3a9ec9] focus:ring-[#3a9ec9]"
+                          checked={selectedOrgs.includes(org)}
+                          onChange={() => toggleOrg(org)}
+                        />
+                        <label htmlFor={`org-${index}`} className="ml-2 text-gray-700 text-sm hover:text-[#02033b] cursor-pointer transition-colors">
+                          {org}
+                        </label>
+                      </div>
+                    ))}
                   </div>
                 </div>
-                
-                <div className="space-y-3 pl-4 max-h-64 overflow-y-auto pr-2">
-                  {filteredOrgs.map((org, index) => (
-                    <div key={index} className="flex items-center">
-                      <input 
-                        type="checkbox" 
-                        id={`org-${index}`}
-                        className="w-4 h-4 rounded border-gray-300 text-[#51c3f2] focus:ring-[#51c3f2]"
-                        checked={selectedOrgs.includes(org)}
-                        onChange={() => toggleOrg(org)}
-                      />
-                      <label htmlFor={`org-${index}`} className="ml-3 text-gray-700 text-sm">
-                        {org}
-                      </label>
-                    </div>
-                  ))}
+
+                {/* Tahun Filter */}
+                <div className="mb-6">
+                  <h4 className="font-medium text-[#02033b] mb-3">Tahun</h4>
+                  <div className="grid grid-cols-2 gap-2">
+                    {years.map((year) => (
+                      <div key={year} className="flex items-center">
+                        <input 
+                          type="checkbox" 
+                          id={`year-${year}`}
+                          className="w-4 h-4 rounded border-gray-300 text-[#3a9ec9] focus:ring-[#3a9ec9]"
+                          checked={selectedYears.includes(year)}
+                          onChange={() => toggleYear(year)}
+                        />
+                        <label htmlFor={`year-${year}`} className="ml-2 text-gray-700 text-sm hover:text-[#02033b] cursor-pointer transition-colors">
+                          {year}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Sektor Filter */}
+                <div className="mb-6">
+                  <h4 className="font-medium text-[#02033b] mb-3">Sektor</h4>
+                  <div className="max-h-60 overflow-y-auto pr-2 space-y-2 custom-scrollbar">
+                    {sectors.map((sector, index) => (
+                      <div key={index} className="flex items-center">
+                        <input 
+                          type="checkbox" 
+                          id={`sector-${index}`}
+                          className="w-4 h-4 rounded border-gray-300 text-[#3a9ec9] focus:ring-[#3a9ec9]"
+                          checked={selectedSectors.includes(sector)}
+                          onChange={() => toggleSector(sector)}
+                        />
+                        <label htmlFor={`sector-${index}`} className="ml-2 text-gray-700 text-sm hover:text-[#02033b] cursor-pointer transition-colors">
+                          {sector}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-
-              {/* Tahun Metadata Filter */}
-              <div className="mb-8">
-                <div className="flex items-center mb-4">
-                  <div className="w-1 h-6 bg-[#e18335] rounded-full mr-3"></div>
-                  <h3 className="font-semibold text-lg">Tahun Metadata</h3>
-                </div>
-                <div className="space-y-3 pl-4">
-                  {years.map((year) => (
-                    <div key={year} className="flex items-center">
-                      <input 
-                        type="checkbox" 
-                        id={`year-${year}`}
-                        className="w-4 h-4 rounded border-gray-300 text-[#51c3f2] focus:ring-[#51c3f2]"
-                        checked={selectedYears.includes(year)}
-                        onChange={() => toggleYear(year)}
-                      />
-                      <label htmlFor={`year-${year}`} className="ml-3 text-gray-700 text-sm">
-                        METADATA {year}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Sektor Data Filter */}
-              <div className="mb-8">
-                <div className="flex items-center mb-4">
-                  <div className="w-1 h-6 bg-[#e18335] rounded-full mr-3"></div>
-                  <h3 className="font-semibold text-lg">Sektor Data</h3>
-                </div>
-                <div className="space-y-3 pl-4 max-h-64 overflow-y-auto pr-2">
-                  {sectors.map((sector, index) => (
-                    <div key={index} className="flex items-center">
-                      <input 
-                        type="checkbox" 
-                        id={`sector-${index}`}
-                        className="w-4 h-4 rounded border-gray-300 text-[#51c3f2] focus:ring-[#51c3f2]"
-                        checked={selectedSectors.includes(sector)}
-                        onChange={() => toggleSector(sector)}
-                      />
-                      <label htmlFor={`sector-${index}`} className="ml-3 text-gray-700 text-sm">
-                        {sector}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Reset Filters Button */}
-              <button 
-                className="w-full py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors"
-                onClick={resetFilters}
-              >
-                Reset Filter
-              </button>
             </div>
 
-            {/* Right Content - Metadata List */}
+            {/* Konten Kanan - Daftar Metadata */}
             <div className="w-full lg:w-3/4">
-              {/* Results Count */}
-              <div className="mb-6 flex justify-between items-center">
-                <h2 className="text-xl font-semibold text-[#02033b]">
-                  Hasil Pencarian
-                </h2>
-                <p className="text-gray-500">
-                  Menampilkan {filteredItems.length} dari {metadataItems.length} dataset
-                </p>
+              {/* Header Hasil Pencarian */}
+              <div className="bg-white rounded-xl shadow-md border border-gray-200 p-5 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                <div className="flex items-center mb-3 sm:mb-0">
+                  <div className="w-3 h-8 bg-gradient-to-b from-[#e18335] to-[#f6c041] rounded-full mr-3"></div>
+                  <h2 className="font-bold text-[#02033b] text-xl">
+                    {filteredItems.length} Dataset Ditemukan
+                  </h2>
+                </div>
+                <div className="flex items-center space-x-2 w-full sm:w-auto">
+                  <span className="text-sm text-gray-500 whitespace-nowrap">Urutkan berdasarkan:</span>
+                  <select className="border border-gray-300 rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3a9ec9] focus:border-transparent bg-white">
+                    <option>Paling Relevan</option>
+                    <option>Paling Banyak Dilihat</option>
+                    <option>Terbaru</option>
+                    <option>Terlama</option>
+                  </select>
+                </div>
               </div>
 
-              {/* Metadata Items */}
+              {/* Item Metadata - Desain Kartu Modern */}
               {filteredItems.length > 0 ? (
-                filteredItems.map((item) => (
-                  <div key={item.id} className="bg-white rounded-2xl shadow-xl p-6 mb-6 hover:shadow-2xl transition-shadow">
-                    <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-                      <h3 className="text-xl font-medium text-[#02033b] hover:underline mb-2 md:mb-0 md:max-w-2xl cursor-pointer">
-                        {item.title}
-                      </h3>
-                      <div className="flex items-center space-x-3">
-                        <div className="bg-[#e18335] rounded px-3 py-1 border border-gray-500">
-                          <span className="text-white font-normal">{item.type}</span>
+                <div className="space-y-5">
+                  {filteredItems.map((item) => (
+                    <div key={item.id} className="bg-white rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition-all overflow-hidden group">
+                      <div className="p-6">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                          <div className="flex-1">
+                            <h3 className="text-xl font-bold text-[#02033b] group-hover:text-[#3a9ec9] mb-2 cursor-pointer transition-colors">
+                              {item.title}
+                            </h3>
+                            <div className="flex flex-wrap items-center gap-3 mt-3 mb-4">
+                              <span className="bg-[#e1f5fe] text-[#3a9ec9] text-xs px-3 py-1.5 rounded-lg font-medium">
+                                {item.type}
+                              </span>
+                              <span className="text-sm text-gray-600">
+                                {item.source} • {item.year}
+                              </span>
+                              <span className="text-sm text-gray-600">
+                                Sektor: <span className="font-medium">{item.sector}</span>
+                              </span>
+                            </div>
+                          </div>
+                          <button className="bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] hover:from-[#3a9ec9] hover:to-[#2a8bb7] text-white px-5 py-2.5 rounded-lg text-sm font-medium flex items-center transition-all hover:shadow-md whitespace-nowrap">
+                            <FiDownload className="mr-2" /> Unduh
+                          </button>
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-5 pt-5 border-t border-gray-100 gap-3">
+                          <div className="flex flex-wrap gap-5">
+                            <div className="flex items-center text-sm text-gray-600">
+                              <FiEye className="mr-1.5 text-[#3a9ec9]" /> {item.views.toLocaleString()} kali dilihat
+                            </div>
+                            <div className="flex items-center text-sm text-gray-600">
+                              <FiDownload className="mr-1.5 text-[#3a9ec9]" /> {item.downloads.toLocaleString()} kali diunduh
+                            </div>
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            Terakhir diperbarui: {item.date}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
+                        <div className="flex justify-between text-sm text-gray-600 mb-2">
+                          <span>Tingkat popularitas dataset</span>
+                          <span>{Math.round(item.views / 30)}%</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div 
+                            className="bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] h-2 rounded-full" 
+                            style={{ width: `${Math.min(100, item.views / 30)}%` }}
+                          ></div>
                         </div>
                       </div>
                     </div>
-
-                    <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                      <div>
-                        <p className="text-gray-500">
-                          <span className="font-medium">Tanggal Publikasi:</span> {item.date}
-                        </p>
-                        <p className="text-gray-500 text-sm">
-                          <span className="font-medium">Sumber:</span> {item.source}
-                        </p>
-                        <p className="text-gray-500 text-sm">
-                          <span className="font-medium">Tahun Metadata:</span> METADATA {item.year}
-                        </p>
-                      </div>
-
-                      <div className="mt-3 sm:mt-0 flex items-center space-x-6">
-                        <div className="flex items-center">
-                          <span className="text-gray-500 mr-2">{item.views}</span>
-                          <svg 
-                            className="w-5 h-5 text-gray-400" 
-                            fill="none" 
-                            stroke="currentColor" 
-                            viewBox="0 0 24 24"
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                          </svg>
-                        </div>
-
-                        <button className="bg-[#51c3f2] rounded px-4 py-1.5 text-white font-semibold flex items-center shadow hover:bg-[#3a9ec9] transition-colors">
-                          <svg 
-                            className="w-4 h-4 mr-2" 
-                            fill="none" 
-                            stroke="currentColor" 
-                            viewBox="0 0 24 24"
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                          </svg>
-                          Unduh
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 pt-4 border-t border-gray-200">
-                      <div className="flex justify-between text-sm text-gray-500 mb-1">
-                        <span>Popularitas dataset</span>
-                        <span>{Math.round(item.views / 30)}%</span>
-                      </div>
-                      <div className="w-full bg-gray-100 rounded-full h-2">
-                        <div 
-                          className="bg-[#51c3f2] h-2 rounded-full" 
-                          style={{ width: `${Math.min(100, item.views / 30)}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  </div>
-                ))
+                  ))}
+                </div>
               ) : (
-                <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
-                  <svg 
-                    className="w-16 h-16 mx-auto text-gray-400" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <h3 className="mt-4 text-lg font-medium text-gray-900">
-                    Tidak ada hasil ditemukan
+                <div className="bg-white rounded-xl shadow-md border border-gray-200 p-10 text-center">
+                  <div className="mx-auto w-16 h-16 bg-[#e1f5fe] rounded-full flex items-center justify-center text-[#3a9ec9] mb-5">
+                    <FiX className="text-2xl" />
+                  </div>
+                  <h3 className="text-xl font-medium text-[#02033b] mb-2">
+                    Tidak ada hasil yang cocok
                   </h3>
-                  <p className="mt-2 text-gray-500">
-                    Coba ubah filter pencarian Anda atau gunakan kata kunci yang berbeda
+                  <p className="text-gray-600 max-w-md mx-auto mb-6">
+                    Coba sesuaikan filter pencarian atau gunakan kata kunci yang berbeda
                   </p>
+                  <button 
+                    onClick={resetFilters}
+                    className="bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] hover:from-[#3a9ec9] hover:to-[#2a8bb7] text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-all hover:shadow-md"
+                  >
+                    Atur Ulang Filter
+                  </button>
                 </div>
               )}
 
-              {/* Pagination */}
+              {/* Pagination Modern */}
               {filteredItems.length > 0 && (
-                <div className="flex justify-center mt-8">
+                <div className="flex justify-center mt-10">
                   <nav className="flex items-center space-x-2">
-                    <button className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200">
-                      <svg 
-                        className="w-5 h-5" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                      </svg>
+                    <button className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                      Sebelumnya
                     </button>
                     {[1, 2, 3, 4, 5].map((num) => (
                       <button 
                         key={num}
-                        className={`w-10 h-10 flex items-center justify-center rounded-full ${num === 1 ? 'bg-[#51c3f2] text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
+                        className={`px-4 py-2 rounded-lg border ${num === 1 ? 'bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] text-white border-transparent' : 'bg-white text-gray-600 hover:bg-gray-50 border-gray-300'}`}
                       >
                         {num}
                       </button>
                     ))}
-                    <button className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200">
-                      <svg 
-                        className="w-5 h-5" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
+                    <button className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-50">
+                      Berikutnya
                     </button>
                   </nav>
                 </div>
@@ -509,6 +442,24 @@ const MetadataPage = () => {
             </div>
           </div>
         </div>
+
+        {/* Custom scrollbar styles */}
+        <style jsx>{`
+          .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+          }
+          .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+          }
+          .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+          }
+          .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+          }
+        `}</style>
       </div>
     </Layout>
   );

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -35,11 +36,12 @@ const Navbar = () => {
         isScrolled ? 'shadow-md' : ''
       }`}
       style={{
-        height: '100px'
+        height: '100px',
+        boxShadow: 'inset 0 -1px 0 0 rgba(0, 0, 0, 0.05)'
       }}
     >
-      {/* Floating shadow */}
-      <div className="absolute inset-x-0 bottom-0 h-4 bg-gradient-to-t from-purple-100/70 to-transparent" />
+      {/* Gradient separator abu-abu */}
+      <div className="absolute inset-x-0 bottom-0 h-3 bg-gradient-to-t from-gray-200/40 to-transparent" />
       
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex items-center justify-between py-0">
@@ -60,7 +62,7 @@ const Navbar = () => {
                   onMouseEnter={() => handleDropdownHover('metadata')}
                   onMouseLeave={handleDropdownLeave}
                 >
-                  <Link to="/metadata" className="font-bold text-indigo-800 hover:text-purple-600 transition-colors duration-200 flex items-center cursor-pointer">
+                  <Link to="/metadata" className="font-bold text-[#3a9ec9] hover:text-[#2a8bb7] transition-colors duration-200 flex items-center cursor-pointer">
                     Metadata
                     <i className={`ri-arrow-down-s-line ml-1 transition-transform duration-200 ${activeDropdown === 'metadata' ? 'rotate-180' : ''}`}></i>
                   </Link>
@@ -71,7 +73,7 @@ const Navbar = () => {
                       <Link
                         key={year}
                         to={`/metadata?year=${year}`}
-                        className="block px-4 py-2 text-indigo-800 hover:bg-purple-50 hover:text-purple-600 transition-colors duration-150"
+                        className="block px-4 py-2 text-[#3a9ec9] hover:bg-blue-50 hover:text-[#2a8bb7] transition-colors duration-150"
                       >
                         METADATA {year}
                       </Link>
@@ -85,7 +87,7 @@ const Navbar = () => {
                   onMouseEnter={() => handleDropdownHover('dokumen')}
                   onMouseLeave={handleDropdownLeave}
                 >
-                  <div className="font-bold text-indigo-800 hover:text-purple-600 transition-colors duration-200 flex items-center cursor-pointer">
+                  <div className="font-bold text-[#3a9ec9] hover:text-[#2a8bb7] transition-colors duration-200 flex items-center cursor-pointer">
                     Dokumen Statistik
                     <i className={`ri-arrow-down-s-line ml-1 transition-transform duration-200 ${activeDropdown === 'dokumen' ? 'rotate-180' : ''}`}></i>
                   </div>
@@ -103,7 +105,7 @@ const Navbar = () => {
                       <a
                         key={item}
                         href="#"
-                        className="block px-4 py-2 text-indigo-800 hover:bg-purple-50 hover:text-purple-600 transition-colors duration-150"
+                        className="block px-4 py-2 text-[#3a9ec9] hover:bg-blue-50 hover:text-[#2a8bb7] transition-colors duration-150"
                       >
                         {item}
                       </a>
@@ -113,12 +115,15 @@ const Navbar = () => {
 
                 {/* Regular Menu Items */}
                 <li>
-                  <a href="#" className="font-bold text-indigo-800 hover:text-purple-600 transition-colors duration-200">
+                  <Link 
+                    to="/organisasi" 
+                    className="font-bold text-[#3a9ec9] hover:text-[#2a8bb7] transition-colors duration-200"
+                  >
                     Organisasi
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="font-bold text-indigo-800 hover:text-purple-600 transition-colors duration-200">
+                  <a href="#" className="font-bold text-[#3a9ec9] hover:text-[#2a8bb7] transition-colors duration-200">
                     Infografis
                   </a>
                 </li>
@@ -128,9 +133,9 @@ const Navbar = () => {
             <div className="ml-8">
               <a
                 href="#"
-                className="bg-gradient-to-r from-purple-500 to-indigo-600 px-6 py-2.5 rounded-full text-white font-bold hover:from-purple-600 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-purple-300/50"
+                className="bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] hover:from-[#3a9ec9] hover:to-[#2a8bb7] px-6 py-2.5 rounded-full text-white font-bold transition-all duration-300 shadow-lg hover:shadow-blue-300/50"
               >
-                Login
+                Tentang
               </a>
             </div>
           </div>
@@ -139,13 +144,13 @@ const Navbar = () => {
           <div className="md:hidden flex items-center">
             <a
               href="#"
-              className="bg-gradient-to-r from-purple-500 to-indigo-600 px-5 py-2 rounded-full text-white font-bold hover:from-purple-600 hover:to-indigo-700 transition-colors shadow-md mr-4"
+              className="bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] hover:from-[#3a9ec9] hover:to-[#2a8bb7] px-5 py-2 rounded-full text-white font-bold transition-colors shadow-md mr-4"
             >
-              Login
+              Tentang
             </a>
             <button 
               onClick={toggleMenu}
-              className="text-2xl focus:outline-none text-indigo-800 hover:text-purple-600 transition-colors"
+              className="text-2xl focus:outline-none text-[#3a9ec9] hover:text-[#2a8bb7] transition-colors"
             >
               <i className="ri-menu-line"></i>
             </button>
@@ -155,9 +160,9 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       <div 
-        className={`md:hidden fixed inset-y-0 right-0 w-72 bg-gradient-to-b from-indigo-50 to-purple-50 z-50 transform transition-transform duration-300 ease-out ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`md:hidden fixed inset-y-0 right-0 w-72 bg-gradient-to-b from-blue-50 to-cyan-50 z-50 transform transition-transform duration-300 ease-out ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
         style={{
-          boxShadow: '-8px 0 24px rgba(139, 92, 246, 0.15)'
+          boxShadow: '-8px 0 24px rgba(58, 158, 201, 0.15)'
         }}
       >
         <div className="p-8 h-full flex flex-col">
@@ -167,29 +172,45 @@ const Navbar = () => {
             </Link>
             <button 
               onClick={toggleMenu} 
-              className="text-3xl focus:outline-none text-indigo-800 hover:text-purple-600 transition-colors"
+              className="text-3xl focus:outline-none text-[#3a9ec9] hover:text-[#2a8bb7] transition-colors"
             >
               ×
             </button>
           </div>
           
           <ul className="space-y-6">
-            {/* Mobile Metadata Link */}
+            {/* Mobile Metadata Dropdown */}
             <li>
-              <Link 
-                to="/metadata"
-                className="block py-3 text-lg font-medium text-indigo-800 border-b border-indigo-100 hover:text-purple-600 transition-colors duration-200"
-                onClick={toggleMenu}
+              <button 
+                onClick={() => setActiveDropdown(activeDropdown === 'metadata' ? null : 'metadata')}
+                className="w-full flex justify-between items-center py-3 text-lg font-medium text-[#3a9ec9] border-b border-blue-100 hover:text-[#2a8bb7] transition-colors duration-200"
               >
                 Metadata
-              </Link>
+                <i className={`ri-arrow-down-s-line transition-transform duration-200 ${activeDropdown === 'metadata' ? 'rotate-180' : ''}`}></i>
+              </button>
+              <div 
+                className={`overflow-hidden transition-all duration-300 ${activeDropdown === 'metadata' ? 'max-h-96' : 'max-h-0'}`}
+              >
+                <div className="ml-4 mt-2 space-y-2">
+                  {[2021, 2022, 2023, 2024].map(year => (
+                    <Link
+                      key={year}
+                      to={`/metadata?year=${year}`}
+                      className="block py-2 pl-4 text-[#3a9ec9] hover:text-[#2a8bb7] transition-colors duration-150"
+                      onClick={toggleMenu}
+                    >
+                      METADATA {year}
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </li>
 
             {/* Mobile Dokumen Statistik Dropdown */}
             <li>
               <button 
                 onClick={() => setActiveDropdown(activeDropdown === 'dokumen' ? null : 'dokumen')}
-                className="w-full flex justify-between items-center py-3 text-lg font-medium text-indigo-800 border-b border-indigo-100 hover:text-purple-600 transition-colors duration-200"
+                className="w-full flex justify-between items-center py-3 text-lg font-medium text-[#3a9ec9] border-b border-blue-100 hover:text-[#2a8bb7] transition-colors duration-200"
               >
                 Dokumen Statistik
                 <i className={`ri-arrow-down-s-line transition-transform duration-200 ${activeDropdown === 'dokumen' ? 'rotate-180' : ''}`}></i>
@@ -209,7 +230,7 @@ const Navbar = () => {
                     <a
                       key={item}
                       href="#"
-                      className="block py-2 pl-4 text-indigo-700 hover:text-purple-600 transition-colors duration-150"
+                      className="block py-2 pl-4 text-[#3a9ec9] hover:text-[#2a8bb7] transition-colors duration-150"
                     >
                       {item}
                     </a>
@@ -220,12 +241,16 @@ const Navbar = () => {
 
             {/* Regular Mobile Menu Items */}
             <li>
-              <a href="#" className="block py-3 text-lg font-medium text-indigo-800 border-b border-indigo-100 hover:text-purple-600 transition-colors duration-200">
+              <Link 
+                to="/organisasi"
+                className="block py-3 text-lg font-medium text-[#3a9ec9] border-b border-[#3a9ec9]/20 hover:text-[#2a8bb7] transition-colors duration-200"
+                onClick={toggleMenu}
+              >
                 Organisasi
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="block py-3 text-lg font-medium text-indigo-800 border-b border-indigo-100 hover:text-purple-600 transition-colors duration-200">
+              <a href="#" className="block py-3 text-lg font-medium text-[#3a9ec9] border-b border-[#3a9ec9]/20 hover:text-[#2a8bb7] transition-colors duration-200">
                 Infografis
               </a>
             </li>
@@ -234,9 +259,9 @@ const Navbar = () => {
           <div className="mt-auto pt-8">
             <a 
               href="#"
-              className="block text-center bg-gradient-to-r from-purple-500 to-indigo-600 px-6 py-3 rounded-full text-white font-bold hover:from-purple-600 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-purple-300/50"
+              className="block text-center bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] hover:from-[#3a9ec9] hover:to-[#2a8bb7] px-6 py-3 rounded-full text-white font-bold transition-all duration-300 shadow-lg hover:shadow-blue-300/50"
             >
-              Login
+              Tentang
             </a>
           </div>
         </div>

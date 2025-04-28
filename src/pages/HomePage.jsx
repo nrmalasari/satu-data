@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import Layout from "../components/Layout";
 import CountUp from 'react-countup';
+import axios from 'axios';
 
 const HomePage = () => {
   // Data samples
@@ -73,12 +74,7 @@ const HomePage = () => {
   return (
     <Layout>
       {/* Section  */}
-      <section className="relative h-[600px] md:h-[700px] lg:h-[800px] bg-gradient-to-br from-[#e8f1ff] to-[#d6e6ff] overflow-hidden pt-20 lg:pt-0">
-        {/* Animated background elements */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
-          <div className="absolute top-20 left-10 w-64 h-64 bg-[#51c3f2] rounded-full filter blur-[80px] opacity-20 animate-float"></div>
-          <div className="absolute bottom-10 right-20 w-80 h-80 bg-[#f6c041] rounded-full filter blur-[100px] opacity-15 animate-float-delay"></div>
-        </div>
+      <section className="relative h-[600px] md:h-[700px] lg:h-[800px] bg-gradient-to-br from-[#e8f1ff] to-[#d6e6ff] pt-20 lg:pt-0 z-0">
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between h-full pt-12 lg:pt-0">
@@ -121,39 +117,34 @@ const HomePage = () => {
             </div>
             
             {/* Right Column - Modern Image/GIF Display - Hidden on mobile */}
-            <div className="hidden lg:block w-full lg:w-1/2 mt-8 sm:mt-12 lg:mt-0 lg:pl-12 flex justify-center items-center z-10">
-              <div className="relative w-full max-w-2xl">
-                {/* Modern frame with gradient border */}
-                <div className="absolute -inset-2 bg-gradient-to-tr from-[#51c3f2] via-[#f6c041] to-[#e18335] rounded-2xl opacity-70 blur-md animate-rotate-colors"></div>
-                <div className="relative rounded-xl overflow-hidden shadow-2xl transform transition-all duration-500 hover:scale-[1.02]">
-                  <img 
-                    src="/images/gambardata.gif" 
-                    alt="Visualisasi Data Parepare"
-                    className="w-full h-auto object-cover"
-                  />
-                  {/* Shine effect on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none"></div>
-                </div>
-                
-                {/* Floating elements */}
-                <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-[#51c3f2] rounded-2xl opacity-20 filter blur-xl animate-pulse-slow"></div>
-                <div className="absolute -top-6 -right-6 w-20 h-20 bg-[#f6c041] rounded-full opacity-20 filter blur-xl animate-pulse-slower"></div>
+          <div className="hidden lg:block w-full lg:w-1/2 mt-8 sm:mt-12 lg:mt-0 lg:pl-12 justify-center items-center z-10">
+            <div className="relative w-full max-w-2xl">
+              {/* Mengubah dari gradient border ke shadow biasa */}
+              <div className="rounded-xl overflow-hidden shadow-xl transform transition-all duration-500 hover:scale-[1.02]">
+                <img 
+                  src="/images/gambardata.gif" 
+                  alt="Visualisasi Data Parepare"
+                  className="w-full h-auto object-cover"
+                />
+                {/* Shine effect on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none"></div>
               </div>
             </div>
           </div>
+          </div>
         </div>
 
-        {/* Stats Section - Modern Design - Adjusted spacing */}
-        <div className="container mx-auto px-4 sm:px-6 lg:absolute lg:bottom-2 lg:left-0 lg:right-0 z-10 mt-8 sm:mt-12 lg:mt-0">
-          <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-6 max-w-4xl mx-auto grid grid-cols-3 gap-4 border border-white/20">
+        {/* Stats Section - Now as separate section */}
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-center relative -mt-16 mb-16 z-20">
+          <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-xl p-4 sm:p-5 max-w-4xl w-full grid grid-cols-3 gap-2 sm:gap-4 border border-white/20">
             {[
               { value: 500, label: "Total Dataset" },
-              { value: 59, label: "Organisasi" },
+              { value: 59, label: "Organisasi" }, 
               { value: 650, label: "Infografis" }
             ].map((stat, index) => (
-              <div key={index} className="text-center p-2">
-                <p className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br from-[#02033b] to-[#51c3f2]">
-                  <CountUp 
+              <div key={index} className="text-center p-1 sm:p-2">
+                <p className="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br from-[#02033b] to-[#51c3f2]">
+                  <CountUp
                     end={stat.value}
                     start={0}
                     duration={2.5}
@@ -161,7 +152,7 @@ const HomePage = () => {
                     suffix={index === 0 ? "+" : ""}
                   />
                 </p>
-                <p className="text-sm sm:text-base font-medium mt-2 text-gray-600">
+                <p className="text-xs sm:text-sm md:text-base font-medium mt-1 sm:mt-2 text-gray-600">
                   {stat.label}
                 </p>
               </div>
@@ -171,7 +162,7 @@ const HomePage = () => {
       </section>
 
       {/* Infografis Section - Modern Carousel */}
-      <section className="py-16 sm:py-20 lg:py-28 relative bg-white">
+      <section className="py-16 sm:py-20 lg:py-28 bg-white z-10">
         <div className="container mx-auto px-0"> 
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-10 px-4 sm:px-6">
             <div className="flex items-center mb-4 sm:mb-0">
