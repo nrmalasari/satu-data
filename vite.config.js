@@ -9,5 +9,5 @@ export default defineConfig({
     tailwindcss(),
     react()
   ],
-  base: '/satu-data/', 
+  base: isProduction ? '/satu-data/' : '/' 
 });
