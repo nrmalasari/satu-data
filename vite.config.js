@@ -2,12 +2,11 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
-const isProduction = process.env.NODE_ENV === 'production';
-
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     tailwindcss(),
     react()
   ],
-  base: isProduction ? '/satu-data/' : '/satu-data' 
+  base: process.env.VITE_BASE_PATH || "/satu-data",
 });
