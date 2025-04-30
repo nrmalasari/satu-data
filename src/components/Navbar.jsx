@@ -123,9 +123,12 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li>
-                  <a href="#" className="font-bold text-[#3a9ec9] hover:text-[#2a8bb7] transition-colors duration-200">
+                  <Link 
+                    to="/infografis" 
+                    className="font-bold text-[#3a9ec9] hover:text-[#2a8bb7] transition-colors duration-200"
+                    >
                     Infografis
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </nav>
@@ -250,9 +253,13 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <a href="#" className="block py-3 text-lg font-medium text-[#3a9ec9] border-b border-[#3a9ec9]/20 hover:text-[#2a8bb7] transition-colors duration-200">
+              <Link 
+                to="/infografis" 
+                className="block py-3 text-lg font-medium text-[#3a9ec9] border-b border-[#3a9ec9]/20 hover:text-[#2a8bb7] transition-colors duration-200"
+                onClick={toggleMenu}
+                >
                 Infografis
-              </a>
+              </Link>
             </li>
           </ul>
           
