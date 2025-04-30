@@ -9,5 +9,5 @@ export default defineConfig({
     tailwindcss(),
     react()
   ],
-  base: isProduction ? "/satu-data/" : "/", // base kosong saat dev
+  base: '/satu-data/', 
 });
