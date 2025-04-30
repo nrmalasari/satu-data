@@ -10,22 +10,22 @@ const HomePage = () => {
     {
       id: 1,
       title: "Data Strategis Perekonomian Kota Parepare",
-      imageUrl: "/images/infografis1.png",
+      imageUrl: "/images/infografis1.jpg",
     },
     {
       id: 2,
       title: "Informasi Terbaru",
-      imageUrl: "/images/infografis2.png",
+      imageUrl: "/images/infografis2.jpg",
     },
     {
       id: 3,
       title: "Informasi Terbaru",
-      imageUrl: "/images/infografis3.png",
+      imageUrl: "/images/infografis3.jpg",
     },
     {
       id: 4,
       title: "Informasi Terbaru",
-      imageUrl: "/images/infografis4.png",
+      imageUrl: "/images/infografis4.jpg",
     },
     {
       id: 5,
