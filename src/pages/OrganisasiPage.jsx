@@ -121,12 +121,12 @@ const OrganisasiPage = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
               <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex space-x-2">
-                <button 
+                {/* <button 
                   className="bg-gradient-to-r from-[#f6c041] to-[#e18335] text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center transition-all hover:shadow-md"
                   onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
                 >
                   <FiFilter className="mr-2" /> Filter
-                </button>
+                </button> */}
               </div>
             </div>
           </div>

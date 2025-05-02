@@ -6,6 +6,7 @@ import MetadataPage from './pages/MetadataPage';
 import OrganisasiPage from './pages/OrganisasiPage';
 import axios from 'axios';
 import InfografisPage from './pages/InfografisPage';
+import DetailPage from './pages/DetailPage';
 
 // Buat wrapper untuk menangani scroll
 const ScrollToTopWrapper = ({ children }) => {
@@ -31,6 +32,7 @@ function App() {
             <Route path="/metadata" element={<MetadataPage />} />
             <Route path="/organisasi" element={<OrganisasiPage />} />
             <Route path="/infografis" element={<InfografisPage />} />
+            <Route path="/dokumen/:id" element={<DetailPage />} />
           </Routes>
         </ScrollToTopWrapper>
       </div>
