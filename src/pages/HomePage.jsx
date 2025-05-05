@@ -118,19 +118,18 @@ const HomePage = () => {
             </div>
             
             {/* Right Column - Modern Image/GIF Display - Hidden on mobile */}
-          <div className="hidden lg:block w-full lg:w-1/2 mt-8 sm:mt-12 lg:mt-0 lg:pl-12 justify-center items-center z-10">
-            <div className="relative w-full max-w-2xl">
-              {/* Mengubah dari gradient border ke shadow biasa */}
-              <div className="rounded-xl overflow-hidden shadow-xl transform transition-all duration-500 hover:scale-[1.02]">
+            <div className="hidden lg:block w-full lg:w-1/2 mt-8 sm:mt-12 lg:mt-0 lg:pl-12 justify-center items-center z-10">
+              <div className="relative w-full max-w-2xl">
+                {/* Hapus div dengan shadow dan border */}
                 <img 
                   src="/images/gambardata.gif" 
                   alt="Visualisasi Data Parepare"
-                  className="w-full h-auto object-cover"
+                  className="w-full h-auto object-cover rounded-xl mix-blend-screen" // Tambahkan rounded-xl untuk menjaga konsistensi
+                  style={{ background: 'transparent' }}
                 />
-                {/* Shine effect on hover */}
+                {/* Shine effect on hover (opsional, bisa dihapus jika tidak dibutuhkan) */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none"></div>
               </div>
-            </div>
           </div>
           </div>
         </div>
