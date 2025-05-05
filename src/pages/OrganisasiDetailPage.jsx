@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Layout from '../components/Layout';
-import { FiArrowLeft, FiDatabase, FiSearch } from 'react-icons/fi';
+import { FiArrowLeft, FiDatabase, FiSearch, FiDownload, FiEye, FiChevronRight } from 'react-icons/fi';
 import { organizations } from './OrganisasiPage';
 
 const OrganisasiDetailPage = () => {
@@ -27,78 +27,116 @@ const OrganisasiDetailPage = () => {
     );
   }
 
-  // Sample datasets based on your image
+  // Sample datasets matching the metadata format (without value)
   const datasets = [
     {
       id: 1,
-      title: "Persentase Kopesertaan Jaminan Kesehatan Nasional (JKN)",
-      value: "0.00%",
-      description: "Sasaran: % Cakupan Jaminan Kesehatan dilaksanakan melalui skema Jaminan Kesehatan Nasional (JKN). JKN adalah program Pemerintah yang bertujuan memberikan kepastian jaminan kesehatan yang menyeluruh bagi seluruh rakyat Indonesia."
+      title: "Persentase Kopesertaan Jaminan Kesehatan Parepare",
+      date: "6 March, 2025",
+      source: organization.name,
+      views: 1896,
+      downloads: 842,
+      type: "PDF",
+      year: 2024,
+      sector: organization.sector
     },
     {
       id: 2,
       title: "Data Cakupan Neonatus dengan Komplikasi yang Ditangani",
-      value: "0.00%",
-      description: "Data cakupan neonatal dengan komplikasi di suatu wilayah kerja pada kurun waktu tertentu yang ditangani sesuai dengan standar oleh tenaga kesehatan terlatih di seluruh fasilitas pelayanan kesehatan."
+      date: "2 December, 2021",
+      source: organization.name,
+      views: 1896,
+      downloads: 721,
+      type: "DOCX",
+      year: 2021,
+      sector: organization.sector
     },
     {
       id: 3,
       title: "Data Permasalahan Kesehatan yang Diintervensi oleh Tim Ketuk Pintu Layani dengan Hati (KPLDH)",
-      value: "0.00%",
-      description: "Data Permasalahan Kesehatan yang Diintervensi oleh Tim Ketuk Pintu Layani dengan Hati (KPLDH) berupa pelayanan kesehatan gratis yang melaksanakan tindak preventif, promosi, kuratif, hingga rehabilitatif."
+      date: "15 January, 2023",
+      source: organization.name,
+      views: 2453,
+      downloads: 1102,
+      type: "PDF",
+      year: 2023,
+      sector: organization.sector
     },
     {
       id: 4,
       title: "Persentase Tempat Pengelolaan Pangan (TPP) yang Memenuhi Syarat Sesuai Standar",
-      value: "0.00%",
-      description: "Persentase Tempat Pengelolaan Pangan (TPP) yang Memenuhi Syarat Sesuai Standar. Tempat Pengelolaan Pangan dalam sup saji yang selanjutnya disebut TPP adalah fasilitas produksi untuk menyiapkan, mengolah pangan."
+      date: "3 May, 2022",
+      source: organization.name,
+      views: 1789,
+      downloads: 893,
+      type: "XLSX",
+      year: 2022,
+      sector: organization.sector
     },
     {
       id: 5,
       title: "Persentase Penduduk Penderita Diabetes Mellitus yang Mendapatkan Pelayanan Kesehatan Sesuai Standar",
-      value: "0.00%",
-      description: "Sasaran: % Penderita DM yang mendapatkan pelayanan kesehatan sesuai standar. Pelayanan kesehatan sesuai standar kepada seluruh penderita Diabetes Mellitus (DM) usia 15 tahun ke atas."
+      date: "10 February, 2024",
+      source: organization.name,
+      views: 1250,
+      downloads: 567,
+      type: "PDF",
+      year: 2024,
+      sector: organization.sector
     }
   ];
 
   return (
     <Layout>
-      <div className="from-[#e8f1ff] to-[#d6e6ff]  min-h-screen">
+      <div className="from-[#e8f1ff] to-[#d6e6ff] min-h-screen">
         {/* Header Section */}
         <div className="bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] pt-32 pb-16 text-white relative overflow-hidden">
-          {/* Background elements */}
-          <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
+        {/* Background elements */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
             <div className="absolute top-20 left-10 w-64 h-64 bg-[#51c3f2] rounded-full filter blur-[80px] opacity-20"></div>
             <div className="absolute bottom-10 right-20 w-80 h-80 bg-[#f6c041] rounded-full filter blur-[100px] opacity-15"></div>
-          </div>
-          
-          <div className="container mx-auto px-4 relative z-10">
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
             <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-              {/* Organization Info - Horizontal layout */}
-              <div className="flex flex-col md:flex-row items-start md:items-center gap-4 flex-1">
+            {/* Organization Info - Horizontal layout */}
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-4 flex-1">
                 {/* Logo Container */}
                 <div className="w-20 h-20 rounded-lg bg-white bg-opacity-20 flex items-center justify-center flex-shrink-0 border-2 border-white border-opacity-30">
-                  <img src={organization.logo} alt={organization.name} className="w-12 h-12 object-contain" />
+                <img src={organization.logo} alt={organization.name} className="w-12 h-12 object-contain" />
                 </div>
                 
                 {/* Organization Title and Description */}
                 <div className="text-white">
-                  <h1 className="text-3xl font-bold uppercase">{organization.name}</h1>
-                  <p className="text-xl opacity-90">{organization.sector}</p>
-                  <p className="text-sm opacity-80 mt-2 max-w-2xl">{organization.description}</p>
+                <h1 className="text-3xl font-bold uppercase">{organization.name}</h1>
+                <p className="text-xl opacity-90">{organization.sector}</p>
+                <p className="text-sm opacity-80 mt-2 max-w-2xl">{organization.description}</p>
+                
+                {/* Back Button - Mobile only, below description */}
+                <div className="block md:hidden mt-4">
+                    <Link 
+                    to="/organisasi" 
+                    className="flex items-center bg-[#f6c041] hover:bg-[#e18335] text-white px-4 py-2 rounded-lg transition-all shadow-md hover:shadow-lg w-fit"
+                    >
+                    <FiArrowLeft className="mr-2" />
+                    Kembali
+                    </Link>
                 </div>
-              </div>
+                </div>
+            </div>
 
-              {/* Back Button - Updated to be more beautiful and moved to right */}
-              <Link 
+            {/* Back Button - Desktop only, right side */}
+            <div className="hidden md:block">
+                <Link 
                 to="/organisasi" 
-                className="flex items-center bg-[#f6c041] hover:bg-[#e18335] text-white px-4 py-2 rounded-lg transition-all shadow-md hover:shadow-lg ml-auto"
-              >
+                className="flex items-center bg-[#f6c041] hover:bg-[#e18335] text-white px-4 py-2 rounded-lg transition-all shadow-md hover:shadow-lg"
+                >
                 <FiArrowLeft className="mr-2" />
                 Kembali
-              </Link>
+                </Link>
             </div>
-          </div>
+            </div>
+        </div>
         </div>
 
         {/* Search Section */}
@@ -135,36 +173,81 @@ const OrganisasiDetailPage = () => {
             </div>
           </div>
 
-          {/* Dataset List */}
+          {/* Dataset List - Updated to match MetadataPage style */}
           <div className="space-y-5">
             {datasets.map((dataset) => (
-              <div key={dataset.id} className="bg-white rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition-all overflow-hidden">
+              <div key={dataset.id} className="bg-white rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition-all overflow-hidden group">
                 <div className="p-6">
                   <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div className="flex-1">
-                      <h3 className="text-xl font-bold text-[#02033b] mb-2">
+                      <h3 className="text-xl font-bold text-[#02033b] group-hover:text-[#3a9ec9] mb-2 cursor-pointer">
                         {dataset.title}
                       </h3>
-                      <p className="text-gray-600 text-sm mb-4">
-                        {dataset.description}
-                      </p>
+                      <div className="flex flex-wrap items-center gap-3 mt-3 mb-4">
+                        <span className="bg-[#e1f5fe] text-[#3a9ec9] text-xs px-3 py-1.5 rounded-lg font-medium">
+                          {dataset.type}
+                        </span>
+                        <span className="text-sm text-gray-600">
+                          {dataset.source} • {dataset.year}
+                        </span>
+                        <span className="text-sm text-gray-600">
+                          Sektor: <span className="font-medium">{dataset.sector}</span>
+                        </span>
+                      </div>
                     </div>
-                    <span className="bg-[#e1f5fe] text-[#3a9ec9] px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap">
-                      {dataset.value}
-                    </span>
+                    <button className="bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] hover:from-[#3a9ec9] hover:to-[#2a8bb7] text-white px-5 py-2.5 rounded-lg text-sm font-medium flex items-center transition-all hover:shadow-md whitespace-nowrap">
+                      <FiDownload className="mr-2" /> Unduh
+                    </button>
                   </div>
 
-                  <div className="mt-4 pt-4 border-t border-gray-100">
-                    <button className="text-[#3a9ec9] hover:text-[#2a8bb7] text-sm font-medium flex items-center">
-                      Lihat detail dataset
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                      </svg>
-                    </button>
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-5 pt-5 border-t border-gray-100 gap-3">
+                    <div className="flex flex-wrap gap-5">
+                      <div className="flex items-center text-sm text-gray-600">
+                        <FiEye className="mr-1.5 text-[#3a9ec9]" /> {dataset.views.toLocaleString()} kali dilihat
+                      </div>
+                      <div className="flex items-center text-sm text-gray-600">
+                        <FiDownload className="mr-1.5 text-[#3a9ec9]" /> {dataset.downloads.toLocaleString()} kali diunduh
+                      </div>
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      Terakhir diperbarui: {dataset.date}
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
+                  <div className="flex justify-between text-sm text-gray-600 mb-2">
+                    <span>Tingkat popularitas dataset</span>
+                    <span>{Math.round(dataset.views / 30)}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] h-2 rounded-full" 
+                      style={{ width: `${Math.min(100, dataset.views / 30)}%` }}
+                    ></div>
                   </div>
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Pagination */}
+          <div className="flex justify-center mt-10">
+            <nav className="flex items-center space-x-2">
+              <button className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                Sebelumnya
+              </button>
+              {[1, 2, 3, 4, 5].map((num) => (
+                <button 
+                  key={num}
+                  className={`px-4 py-2 rounded-lg border ${num === 1 ? 'bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] text-white border-transparent' : 'bg-white text-gray-600 hover:bg-gray-50 border-gray-300'}`}
+                >
+                  {num}
+                </button>
+              ))}
+              <button className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-50">
+                Berikutnya
+              </button>
+            </nav>
           </div>
         </div>
       </div>

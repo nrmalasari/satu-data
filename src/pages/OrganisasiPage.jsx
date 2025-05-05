@@ -11,7 +11,7 @@ export const organizations = [
     logo: "/icons/kominfo-icon.svg",
     datasets: 42,
     updated: "2 hari lalu",
-    sector: "TEKNOLOGI INFORMASI",
+    sector: "TELEKOMUNIKASI",
     description: "Mengelola sistem informasi dan komunikasi pemerintahan kota Parepare",
     contact: "0411-1234567",
     website: "kominfo.parepare.go.id",
@@ -31,12 +31,12 @@ export const organizations = [
   },
   {
       id: 3,
-      name: "Dinas Kesehatan",
+      name: "Dinas Ketenaga Kerjaan",
       logo: "/icons/health-icon.svg",
       datasets: 28,
       updated: "3 hari lalu",
-      sector: "KESEHATAN",
-      description: "Mengelola layanan kesehatan dan fasilitas kesehatan masyarakat",
+      sector: "KEPENDUDUKAN",
+      description: "Mengelola layanan Ketenaga Kerjaan masyarakat Parepare",
       contact: "0411-3456789",
       website: "dinkes.parepare.go.id"
     },
@@ -46,7 +46,7 @@ export const organizations = [
       logo: "/icons/planning-icon.svg",
       datasets: 51,
       updated: "1 hari lalu",
-      sector: "PERENCANAAN",
+      sector: "PEMERINTAHAN",
       description: "Merencanakan dan mengkoordinasikan pembangunan daerah",
       contact: "0411-4567890",
       website: "bappeda.parepare.go.id"
