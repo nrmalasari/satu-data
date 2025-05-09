@@ -138,7 +138,7 @@ const Navbar = () => {
                 href="#"
                 className="bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] hover:from-[#3a9ec9] hover:to-[#2a8bb7] px-6 py-2.5 rounded-full text-white font-bold transition-all duration-300 shadow-lg hover:shadow-blue-300/50"
               >
-                Tentang
+                Login
               </a>
             </div>
           </div>
@@ -149,7 +149,7 @@ const Navbar = () => {
               href="#"
               className="bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] hover:from-[#3a9ec9] hover:to-[#2a8bb7] px-5 py-2 rounded-full text-white font-bold transition-colors shadow-md mr-4"
             >
-              Tentang
+              Login
             </a>
             <button 
               onClick={toggleMenu}
@@ -268,7 +268,7 @@ const Navbar = () => {
               href="#"
               className="block text-center bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] hover:from-[#3a9ec9] hover:to-[#2a8bb7] px-6 py-3 rounded-full text-white font-bold transition-all duration-300 shadow-lg hover:shadow-blue-300/50"
             >
-              Tentang
+              Login
             </a>
           </div>
         </div>
