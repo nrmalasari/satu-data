@@ -69,3 +69,17 @@ button {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+.custom-scrollbar {
+  pointer-events: auto !important;
+}
+
+input[type="checkbox"] {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+label {
+  pointer-events: auto;
+  user-select: none;
+}

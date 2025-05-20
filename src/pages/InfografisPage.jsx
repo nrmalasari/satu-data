@@ -1,114 +1,62 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Layout from "../components/Layout";
 import { FiSearch, FiChevronLeft, FiChevronRight, FiEye } from "react-icons/fi";
+import { getInfografis, getSectors } from '../services/api';
 
 const InfografisPage = () => {
-  // Data infografis
-  const infografisData = [
-    {
-      id: 1,
-      title: "Potret Pertanian Parepare 2024: Luas Perkebunan, Produksi Ternak, dan Upaya Meningkatkan Produktivitas Pertanian",
-      imageUrl: "/images/infografis1.jpg",
-      date: "19 Maret 2025",
-      views: 1200,
-      category: "Pertanian"
-    },
-    {
-      id: 2,
-      title: "Langkah Dinas Kesehatan Kota Parepare dalam Memutus Rantai Penularan Tuberkulosis dengan Deteksi Dini",
-      imageUrl: "/images/infografis2.jpg",
-      date: "12 Maret 2025",
-      views: 980,
-      category: "Kesehatan"
-    },
-    {
-      id: 3,
-      title: "Perkembangan Ekonomi Kota Parepare Triwulan IV 2024",
-      imageUrl: "/images/infografis3.jpg",
-      date: "5 Maret 2025",
-      views: 1500,
-      category: "Ekonomi"
-    },
-    {
-      id: 4,
-      title: "Profil Kependudukan Kota Parepare Tahun 2024",
-      imageUrl: "/images/infografis4.jpg",
-      date: "28 Februari 2025",
-      views: 1800,
-      category: "Kependudukan"
-    },
-    {
-      id: 5,
-      title: "Indeks Pembangunan Manusia (IPM) Kota Parepare 2024",
-      imageUrl: "/images/infografis5.png",
-      date: "21 Februari 2025",
-      views: 1350,
-      category: "Sosial"
-    },
-    {
-      id: 6,
-      title: "Statistik Pendidikan Kota Parepare Tahun Ajaran 2024/2025",
-      imageUrl: "/images/infografis6.jpg",
-      date: "14 Februari 2025",
-      views: 1100,
-      category: "Pendidikan"
-    },
-    {
-        id: 7,
-        title: "Statistik Pendidikan Kota Parepare Tahun Ajaran 2024/2025",
-        imageUrl: "/images/infografis6.jpg",
-        date: "14 Februari 2025",
-        views: 1100,
-        category: "Pendidikan"
-      }
-  ];
-
-  // Categories for filter
-  const categories = [
-    "Semua",
-    "Pertanian",
-    "Kesehatan",
-    "Ekonomi",
-    "Kependudukan",
-    "Sosial",
-    "Pendidikan",
-    "Telekomunikasi",
-    "Keuangan",
-    "Geografis",
-    "Transportasi",
-    "Industri",
-    "Pariwisata"
-  ];
-
-  // State for filter
+  const [data, setData] = useState({
+    infografis: [],
+    sectors: [],
+    loading: true,
+    error: null
+  });
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Semua");
   const [currentPage, setCurrentPage] = useState(1);
   const infografisRef = useRef(null);
 
-  // Filter data
-  const filteredData = infografisData.filter(item => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [infografis, sectors] = await Promise.all([
+          getInfografis(),
+          getSectors()
+        ]);
+
+        setData({
+          infografis,
+          sectors,
+          loading: false,
+          error: null
+        });
+      } catch (error) {
+        setData(prev => ({
+          ...prev,
+          loading: false,
+          error: error.message
+        }));
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const categories = ["Semua", ...new Set(data.sectors.map(sector => sector.name))];
+
+  const filteredData = data.infografis.filter(item => {
     const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === "Semua" || item.category === selectedCategory;
+    const matchesCategory = selectedCategory === "Semua" || item.sector?.name === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
-  // Determine if pagination is needed
-  const needPagination = filteredData.length > 6;
   const itemsPerPage = 6;
-  
-  // Data to display
-  const displayedData = needPagination 
-    ? filteredData.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-      )
-    : filteredData;
-
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const displayedData = filteredData.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
-  // Scroll functions
   const scrollLeft = () => {
     if (infografisRef.current) {
       infografisRef.current.scrollBy({
@@ -126,6 +74,35 @@ const InfografisPage = () => {
       });
     }
   };
+
+  if (data.loading) {
+    return (
+      <Layout>
+        <div className="flex justify-center items-center h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (data.error) {
+    return (
+      <Layout>
+        <div className="flex justify-center items-center h-screen">
+          <div className="text-center p-6 bg-red-50 rounded-lg">
+            <h2 className="text-xl font-bold text-red-600 mb-2">Error Loading Data</h2>
+            <p className="text-gray-700">{data.error}</p>
+            <button 
+              onClick={() => window.location.reload()}
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -165,7 +142,7 @@ const InfografisPage = () => {
             </div>
           </div>
 
-          {/* Category Filter - Horizontal Scroll */}
+          {/* Category Filter */}
           <div className="relative mb-10 max-w-5xl mx-auto px-4">
             <button 
               onClick={scrollLeft}
@@ -213,12 +190,14 @@ const InfografisPage = () => {
                 <div className="w-3 h-8 bg-gradient-to-b from-[#e18335] to-[#f6c041] rounded-full mr-3"></div>
                 <h2 className="font-bold text-[#02033b] text-xl">
                   {filteredData.length} Infografis Ditemukan
-                  {needPagination && ` (Halaman ${currentPage} dari ${totalPages})`}
+                  {totalPages > 1 && ` (Halaman ${currentPage} dari ${totalPages})`}
                 </h2>
               </div>
               <div className="flex items-center space-x-2 w-full sm:w-auto">
                 <span className="text-sm text-gray-500 whitespace-nowrap">Urutkan:</span>
-                <select className="border border-gray-300 rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3a9ec9] focus:border-transparent bg-white">
+                <select 
+                  className="border border-gray-300 rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3a9ec9] focus:border-transparent bg-white"
+                >
                   <option>Terbaru</option>
                   <option>Paling Banyak Dilihat</option>
                   <option>Judul A-Z</option>
@@ -237,44 +216,55 @@ const InfografisPage = () => {
                     className="w-full max-w-[650px] bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group"
                   >
                     {/* Header Infografis */}
-                    <div className="bg-[#3a9ec9] py-3 text-center">
-                      <span className="font-bold text-white text-lg tracking-wider">INFOGRAFIS</span>
-                    </div>
-                    
-                    {/* Image Container */}
-                    <div className="p-6 pb-0">
-                      <div className="w-full h-[500px] bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center relative">
-                        <img 
-                          src={item.imageUrl} 
-                          alt={item.title}
-                          className="w-full h-auto max-h-full object-scale-down"
-                        />
-                        <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300"></div>
-                      </div>
-                    </div>
-                    
-                    {/* Content */}
-                    <div className="p-8 pt-4">
-                      {/* Title */}
-                      <h3 className="text-xl font-semibold text-gray-800 mb-6 line-clamp-3 leading-relaxed">
-                        {item.title}
-                      </h3>
-                      
-                      {/* Category Badge */}
-                      <div className="mb-6">
-                        <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                          {item.category}
-                        </span>
+                    <Link to={`/infografis/${item.id}`} className="block">
+                      <div className="bg-[#3a9ec9] py-3 text-center">
+                        <span className="font-bold text-white text-lg tracking-wider">INFOGRAFIS</span>
                       </div>
                       
-                      {/* Release Date and Views */}
+                      {/* Image Container */}
+                      <div className="p-6 pb-0">
+                        <div className="w-full h-[500px] bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center relative">
+                          <img 
+                            src={item.image_url} 
+                            alt={item.title}
+                            className="w-full h-auto max-h-full object-scale-down cursor-pointer"
+                            onError={(e) => {
+                              e.target.src = '/images/default-infografis.jpg';
+                            }}
+                          />
+                          <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300"></div>
+                        </div>
+                      </div>
+                      
+                      {/* Content */}
+                      <div className="p-8 pt-4">
+                        {/* Title */}
+                        <h3 className="text-xl font-semibold text-gray-800 mb-6 line-clamp-3 leading-relaxed">
+                          {item.title}
+                        </h3>
+                        
+                        {/* Category Badge */}
+                        <div className="mb-6">
+                          <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                            {item.sector?.name || 'Umum'}
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                    
+                    {/* Release Date and Views */}
+                    <div className="px-8 pb-8">
                       <div className="mt-6 flex justify-between items-center">
                         <div className="text-sm font-medium text-gray-600">
-                          RELEASE {item.date}
+                          RELEASE {new Date(item.published_date).toLocaleDateString('id-ID', {
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric'
+                          })}
                         </div>
                         <div className="flex items-center text-sm font-medium text-gray-600">
                           <FiEye className="mr-1" />
-                          {item.views.toLocaleString()} views
+                          {item.views?.toLocaleString() || '0'} views
                         </div>
                       </div>
                     </div>
@@ -282,8 +272,8 @@ const InfografisPage = () => {
                 ))}
               </div>
 
-              {/* Pagination - Only show if needed */}
-              {needPagination && (
+              {/* Pagination */}
+              {totalPages > 1 && (
                 <div className="flex justify-center mt-10">
                   <nav className="flex items-center space-x-2">
                     <button 

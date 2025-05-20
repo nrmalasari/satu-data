@@ -91,3 +91,17 @@ button {
     transform: translateY(0) scale(1);
   }
 }
+
+.custom-scrollbar {
+  pointer-events: auto !important;
+}
+
+input[type="checkbox"] {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+label {
+  pointer-events: auto;
+  user-select: none;
+}

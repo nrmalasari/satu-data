@@ -1,24 +1,439 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Database, Eye } from 'lucide-react';
-import { organizations } from './OrganisasiPage';
 import { 
   LineChart, Line, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer 
 } from 'recharts';
+import { getOrganizationById, getTableById } from '../services/api';
+
+// Dummy organizations data
+const organizations = [
+  {
+    id: 1,
+    industrialData: {
+      totalRegistered: 1500,
+      permitsThisMonth: 250,
+      districts: [
+        { name: 'Kota A', count: 400 },
+        { name: 'Kota B', count: 350 },
+        { name: 'Kota C', count: 300 },
+        { name: 'Kota D', count: 450 }
+      ]
+    },
+    measurementData: [
+      { name: 'Sistem Jaringan', value: 40 },
+      { name: 'Keamanan Data', value: 30 },
+      { name: 'Infrastruktur', value: 30 }
+    ],
+    developmentChartData: [
+      { name: 'Jan', dataset1: 5, dataset2: 7 },
+      { name: 'Feb', dataset1: 6, dataset2: 8 },
+      { name: 'Mar', dataset1: 8, dataset2: 6 },
+      { name: 'Apr', dataset1: 10, dataset2: 5 },
+      { name: 'Mei', dataset1: 12, dataset2: 7 },
+      { name: 'Jun', dataset1: 11, dataset2: 9 },
+      { name: 'Jul', dataset1: 9, dataset2: 10 },
+      { name: 'Agu', dataset1: 7, dataset2: 8 },
+      { name: 'Sep', dataset1: 9, dataset2: 6 },
+      { name: 'Okt', dataset1: 10, dataset2: 7 },
+      { name: 'Nov', dataset1: 8, dataset2: 9 },
+      { name: 'Des', dataset1: 6, dataset2: 10 }
+    ],
+    marketPrices: [
+      { name: 'Laptop', price: '15.000.000', unit: 'Unit', lastUpdate: '30 April 2025' },
+      { name: 'Router', price: '2.500.000', unit: 'Unit', lastUpdate: '30 April 2025' },
+      { name: 'Server', price: '50.000.000', unit: 'Unit', lastUpdate: '30 April 2025' },
+      { name: 'Kabel Fiber', price: '500.000', unit: 'Meter', lastUpdate: '30 April 2025' },
+      { name: 'Switch', price: '3.000.000', unit: 'Unit', lastUpdate: '30 April 2025' }
+    ],
+    foodProducts: [
+      { name: 'Laptop', image: '/api/placeholder/60/60', altText: 'Ikon Laptop' },
+      { name: 'Router', image: '/api/placeholder/60/60', altText: 'Ikon Router' },
+      { name: 'Server', image: '/api/placeholder/60/60', altText: 'Ikon Server' },
+      { name: 'Kabel Fiber', image: '/api/placeholder/60/60', altText: 'Ikon Kabel Fiber' },
+      { name: 'Switch', image: '/api/placeholder/60/60', altText: 'Ikon Switch' },
+      { name: 'Monitor', image: '/api/placeholder/60/60', altText: 'Ikon Monitor' },
+      { name: 'Keyboard', image: '/api/placeholder/60/60', altText: 'Ikon Keyboard' },
+      { name: 'Mouse', image: '/api/placeholder/60/60', altText: 'Ikon Mouse' },
+      { name: 'Printer', image: '/api/placeholder/60/60', altText: 'Ikon Printer' },
+      { name: 'Proyektor', image: '/api/placeholder/60/60', altText: 'Ikon Proyektor' }
+    ],
+    cardTitles: {
+      card1: "Jaringan Terdaftar",
+      card2: "Lisensi Jaringan",
+      card3: "Distribusi Jaringan",
+      card4: "Grafik Perkembangan Jaringan",
+      card5: "Jumlah Perangkat Valid",
+      card6: "Frekuensi Pengujian Perangkat",
+      card7: "Index Harga Perangkat",
+      card8: "Update Harga Perangkat Terkini"
+    }
+  },
+  {
+    id: 2,
+    industrialData: {
+      totalRegistered: 1204,
+      permitsThisMonth: 210,
+      districts: [] // Akan diisi dari API untuk id=5
+    },
+    measurementData: [
+      { name: 'Balai Ukur Satuan', value: 35 },
+      { name: 'Alat Tera', value: 15 },
+      { name: 'Alat Tera Bantu', value: 50 }
+    ],
+    developmentChartData: [
+      { name: 'Jan', dataset1: 3, dataset2: 5 },
+      { name: 'Feb', dataset1: 4, dataset2: 6 },
+      { name: 'Mar', dataset1: 6, dataset2: 4 },
+      { name: 'Apr', dataset1: 8, dataset2: 3 },
+      { name: 'Mei', dataset1: 10, dataset2: 5 },
+      { name: 'Jun', dataset1: 9, dataset2: 7 },
+      { name: 'Jul', dataset1: 7, dataset2: 8 },
+      { name: 'Agu', dataset1: 5, dataset2: 6 },
+      { name: 'Sep', dataset1: 7, dataset2: 4 },
+      { name: 'Okt', dataset1: 8, dataset2: 5 },
+      { name: 'Nov', dataset1: 6, dataset2: 7 },
+      { name: 'Des', dataset1: 4, dataset2: 8 }
+    ],
+    marketPrices: [
+      { name: 'Beras Medium', price: '11.000', unit: 'Kg', lastUpdate: '30 April 2025' },
+      { name: 'Cabe', price: '25.000', unit: 'Kg', lastUpdate: '30 April 2025' },
+      { name: 'Ayam', price: '35.000', unit: 'Kg', lastUpdate: '30 April 2025' },
+      { name: 'Daging', price: '90.000', unit: 'Kg', lastUpdate: '30 April 2025' },
+      { name: 'Ikan', price: '30.000', unit: 'Kg', lastUpdate: '30 April 2025' }
+    ],
+    foodProducts: [
+      { name: 'Beras', image: '/images/beras.png', altText: 'Ikon Beras' },
+      { name: 'Cabe', image: '/images/cabai.png', altText: 'Ikon Cabe' },
+      { name: 'Ayam', image: '/images/ayam.png', altText: 'Ikon Ayam' },
+      { name: 'Daging', image: '/images/daging.png', altText: 'Ikon Daging' },
+      { name: 'Ikan', image: '/images/ikan.png', altText: 'Ikon Ikan' },
+      { name: 'Bawang', image: '/images/Bmerah.png', altText: 'Ikon Bawang' },
+      { name: 'Telur', image: '/images/telur.png', altText: 'Ikon Telur' },
+      { name: 'Tahu', image: '/images/tahu.png', altText: 'Ikon Tahu' },
+      { name: 'Tempe', image: '/images/tempe.png', altText: 'Ikon Tempe' },
+      { name: 'Tomat', image: '/images/tomat.png', altText: 'Ikon Tomat' }
+    ],
+    cardTitles: {
+      card1: "Pedagang Terdaftar",
+      card2: "Izin Usaha",
+      card3: "", // Akan diisi dari API description
+      card4: "Grafik Perkembangan Pasar",
+      card5: "Jumlah Alat Ukur Dagang Valid",
+      card6: "Frekuensi Pengujian Alat Dagang",
+      card7: "Index Harga Pasar",
+      card8: "Update Harga Pasar Terkini"
+    }
+  },
+  {
+    id: 3,
+    industrialData: {
+      totalRegistered: 900,
+      permitsThisMonth: 180,
+      districts: [
+        { name: 'Wilayah A', count: 250 },
+        { name: 'Wilayah B', count: 200 },
+        { name: 'Wilayah C', count: 250 },
+        { name: 'Wilayah D', count: 200 }
+      ]
+    },
+    measurementData: [
+      { name: 'Pendaftaran', value: 50 },
+      { name: 'Pelatihan', value: 30 },
+      { name: 'Pengawasan', value: 20 }
+    ],
+    developmentChartData: [
+      { name: 'Jan', dataset1: 4, dataset2: 6 },
+      { name: 'Feb', dataset1: 5, dataset2: 7 },
+      { name: 'Mar', dataset1: 7, dataset2: 5 },
+      { name: 'Apr', dataset1: 9, dataset2: 4 },
+      { name: 'Mei', dataset1: 11, dataset2: 6 },
+      { name: 'Jun', dataset1: 10, dataset2: 8 },
+      { name: 'Jul', dataset1: 8, dataset2: 9 },
+      { name: 'Agu', dataset1: 6, dataset2: 7 },
+      { name: 'Sep', dataset1: 8, dataset2: 5 },
+      { name: 'Okt', dataset1: 9, dataset2: 6 },
+      { name: 'Nov', dataset1: 7, dataset2: 8 },
+      { name: 'Des', dataset1: 5, dataset2: 9 }
+    ],
+    marketPrices: [
+      { name: 'Sertifikasi', price: '500.000', unit: 'Dokumen', lastUpdate: '30 April 2025' },
+      { name: 'Pelatihan', price: '2.000.000', unit: 'Kelas', lastUpdate: '30 April 2025' },
+      { name: 'Buku Panduan', price: '150.000', unit: 'Unit', lastUpdate: '30 April 2025' },
+      { name: 'Alat Pelatihan', price: '1.000.000', unit: 'Unit', lastUpdate: '30 April 2025' },
+      { name: 'Konsultan', price: '5.000.000', unit: 'Paket', lastUpdate: '30 April 2025' }
+    ],
+    foodProducts: [
+      { name: 'Sertifikasi', image: '/api/placeholder/60/60', altText: 'Ikon Sertifikasi' },
+      { name: 'Pelatihan', image: '/api/placeholder/60/60', altText: 'Ikon Pelatihan' },
+      { name: 'Buku Panduan', image: '/api/placeholder/60/60', altText: 'Ikon Buku Panduan' },
+      { name: 'Alat Pelatihan', image: '/api/placeholder/60/60', altText: 'Ikon Alat Pelatihan' },
+      { name: 'Konsultan', image: '/api/placeholder/60/60', altText: 'Ikon Konsultan' },
+      { name: 'Formulir', image: '/api/placeholder/60/60', altText: 'Ikon Formulir' },
+      { name: 'Poster', image: '/api/placeholder/60/60', altText: 'Ikon Poster' },
+      { name: 'Brosur', image: '/api/placeholder/60/60', altText: 'Ikon Brosur' },
+      { name: 'Laptop', image: '/api/placeholder/60/60', altText: 'Ikon Laptop' },
+      { name: 'Proyektor', image: '/api/placeholder/60/60', altText: 'Ikon Proyektor' }
+    ],
+    cardTitles: {
+      card1: "Pekerja Terdaftar",
+      card2: "Izin Kerja",
+      card3: "Distribusi Pekerja",
+      card4: "Grafik Perkembangan Tenaga Kerja",
+      card5: "Jumlah Alat Pelatihan Valid",
+      card6: "Frekuensi Pengujian Pelatihan",
+      card7: "Index Harga Pelatihan",
+      card8: "Update Harga Pelatihan Terkini"
+    }
+  },
+  {
+    id: 4,
+    industrialData: {
+      totalRegistered: 2000,
+      permitsThisMonth: 400,
+      districts: [
+        { name: 'Zona A', count: 600 },
+        { name: 'Zona B', count: 500 },
+        { name: 'Zona C', count: 450 },
+        { name: 'Zona D', count: 450 }
+      ]
+    },
+    measurementData: [
+      { name: 'Konsultasi KB', value: 45 },
+      { name: 'Pemeriksaan', value: 25 },
+      { name: 'Edukasi', value: 30 }
+    ],
+    developmentChartData: [
+      { name: 'Jan', dataset1: 6, dataset2: 8 },
+      { name: 'Feb', dataset1: 7, dataset2: 9 },
+      { name: 'Mar', dataset1: 9, dataset2: 7 },
+      { name: 'Apr', dataset1: 11, dataset2: 6 },
+      { name: 'Mei', dataset1: 13, dataset2: 8 },
+      { name: 'Jun', dataset1: 12, dataset2: 10 },
+      { name: 'Jul', dataset1: 10, dataset2: 11 },
+      { name: 'Agu', dataset1: 8, dataset2: 9 },
+      { name: 'Sep', dataset1: 10, dataset2: 7 },
+      { name: 'Okt', dataset1: 11, dataset2: 8 },
+      { name: 'Nov', dataset1: 9, dataset2: 10 },
+      { name: 'Des', dataset1: 7, dataset2: 11 }
+    ],
+    marketPrices: [
+      { name: 'Alat KB', price: '300.000', unit: 'Unit', lastUpdate: '30 April 2025' },
+      { name: 'Buku Edukasi', price: '100.000', unit: 'Unit', lastUpdate: '30 April 2025' },
+      { name: 'Poster KB', price: '50.000', unit: 'Lembar', lastUpdate: '30 April 2025' },
+      { name: 'Konseling', price: '200.000', unit: 'Sesi', lastUpdate: '30 April 2025' },
+      { name: 'Obat', price: '150.000', unit: 'Paket', lastUpdate: '30 April 2025' }
+    ],
+    foodProducts: [
+      { name: 'Alat KB', image: '/api/placeholder/60/60', altText: 'Ikon Alat KB' },
+      { name: 'Buku Edukasi', image: '/api/placeholder/60/60', altText: 'Ikon Buku Edukasi' },
+      { name: 'Poster KB', image: '/api/placeholder/60/60', altText: 'Ikon Poster KB' },
+      { name: 'Konseling', image: '/api/placeholder/60/60', altText: 'Ikon Konseling' },
+      { name: 'Obat', image: '/api/placeholder/60/60', altText: 'Ikon Obat' },
+      { name: 'Brosur', image: '/api/placeholder/60/60', altText: 'Ikon Brosur' },
+      { name: 'Leaflet', image: '/api/placeholder/60/60', altText: 'Ikon Leaflet' },
+      { name: 'Kalender', image: '/api/placeholder/60/60', altText: 'Ikon Kalender' },
+      { name: 'Stiker', image: '/api/placeholder/60/60', altText: 'Ikon Stiker' },
+      { name: 'Spanduk', image: '/api/placeholder/60/60', altText: 'Ikon Spanduk' }
+    ],
+    cardTitles: {
+      card1: "Penduduk Terdaftar",
+      card2: "Izin Keluarga",
+      card3: "Distribusi Penduduk",
+      card4: "Grafik Perkembangan Penduduk",
+      card5: "Jumlah Alat KB Valid",
+      card6: "Frekuensi Pengujian KB",
+      card7: "Index Harga KB",
+      card8: "Update Harga KB Terkini"
+    }
+  },
+  {
+    id: 5,
+    industrialData: {
+      totalRegistered: 800,
+      permitsThisMonth: 150,
+      districts: [
+        { name: 'Region A', count: 200 },
+        { name: 'Region B', count: 150 },
+        { name: 'Region C', count: 250 },
+        { name: 'Region D', count: 200 }
+      ]
+    },
+    measurementData: [
+      { name: 'Audit', value: 50 },
+      { name: 'Pengawasan', value: 30 },
+      { name: 'Evaluasi', value: 20 }
+    ],
+    developmentChartData: [
+      { name: 'Jan', dataset1: 2, dataset2: 4 },
+      { name: 'Feb', dataset1: 3, dataset2: 5 },
+      { name: 'Mar', dataset1: 5, dataset2: 3 },
+      { name: 'Apr', dataset1: 7, dataset2: 2 },
+      { name: 'Mei', dataset1: 9, dataset2: 4 },
+      { name: 'Jun', dataset1: 8, dataset2: 6 },
+      { name: 'Jul', dataset1: 6, dataset2: 7 },
+      { name: 'Agu', dataset1: 4, dataset2: 5 },
+      { name: 'Sep', dataset1: 6, dataset2: 3 },
+      { name: 'Okt', dataset1: 7, dataset2: 4 },
+      { name: 'Nov', dataset1: 5, dataset2: 6 },
+      { name: 'Des', dataset1: 3, dataset2: 7 }
+    ],
+    marketPrices: [
+      { name: 'Laporan Audit', price: '1.000.000', unit: 'Dokumen', lastUpdate: '30 April 2025' },
+      { name: 'Konsultasi', price: '3.000.000', unit: 'Sesi', lastUpdate: '30 April 2025' },
+      { name: 'Buku Panduan', price: '200.000', unit: 'Unit', lastUpdate: '30 April 2025' },
+      { name: 'Pelatihan', price: '5.000.000', unit: 'Kelas', lastUpdate: '30 April 2025' },
+      { name: 'Dokumen', price: '500.000', unit: 'Paket', lastUpdate: '30 April 2025' }
+    ],
+    foodProducts: [
+      { name: 'Laporan Audit', image: '/api/placeholder/60/60', altText: 'Ikon Laporan Audit' },
+      { name: 'Konsultasi', image: '/api/placeholder/60/60', altText: 'Ikon Konsultasi' },
+      { name: 'Buku Panduan', image: '/api/placeholder/60/60', altText: 'Ikon Buku Panduan' },
+      { name: 'Pelatihan', image: '/api/placeholder/60/60', altText: 'Ikon Pelatihan' },
+      { name: 'Dokumen', image: '/api/placeholder/60/60', altText: 'Ikon Dokumen' },
+      { name: 'Formulir', image: '/api/placeholder/60/60', altText: 'Ikon Formulir' },
+      { name: 'Poster', image: '/api/placeholder/60/60', altText: 'Ikon Poster' },
+      { name: 'Brosur', image: '/api/placeholder/60/60', altText: 'Ikon Brosur' },
+      { name: 'Laptop', image: '/api/placeholder/60/60', altText: 'Ikon Laptop' },
+      { name: 'Proyektor', image: '/api/placeholder/60/60', altText: 'Ikon Proyektor' }
+    ],
+    cardTitles: {
+      card1: "Instansi Terdaftar",
+      card2: "Laporan Pengawasan",
+      card3: "Distribusi Instansi",
+      card4: "Grafik Perkembangan Pengawasan",
+      card5: "Jumlah Dokumen Valid",
+      card6: "Frekuensi Pengujian Dokumen",
+      card7: "Index Harga Dokumen",
+      card8: "Update Harga Dokumen Terkini"
+    }
+  }
+];
 
 const OrganisasiDetailPage = () => {
   const { id } = useParams();
-  const organization = organizations.find(org => org.id === parseInt(id));
+  const backendId = parseInt(id);
 
-  if (!organization) {
+  const [organization, setOrganization] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchOrganization = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        console.log(`Fetching organization with backendId: ${backendId}`);
+        const response = await getOrganizationById(backendId);
+        console.log('API Response:', response);
+
+        const apiData = response.data || response;
+        console.log('API Data:', apiData);
+
+        if (!apiData || typeof apiData.id === 'undefined') {
+          throw new Error('API response does not contain a valid ID');
+        }
+
+        const apiId = apiData.id;
+        console.log('API ID:', apiId);
+
+        const idMapping = {
+          3: 1,
+          5: 2,
+          4: 3,
+          6: 4,
+          1: 5
+        };
+        const dummyId = idMapping[apiId];
+        if (dummyId === undefined) {
+          throw new Error(`No mapping found for API ID: ${apiId}`);
+        }
+        console.log('Mapped Dummy ID:', dummyId);
+
+        let dummyOrg = organizations.find(org => org.id === dummyId);
+        if (!dummyOrg) {
+          throw new Error(`No dummy organization found for mapped ID: ${dummyId}`);
+        }
+        console.log('Matched Dummy Org:', dummyOrg);
+
+        // Jika backendId adalah 5, ambil data tabel dari endpoint /organizations/5/tables/5
+        let tableData = null;
+        if (backendId === 5) {
+          try {
+            tableData = await getTableById(5, 5);
+            console.log('Table Data:', tableData);
+          } catch (tableError) {
+            console.error('Error fetching table data:', tableError);
+            // Lanjutkan meskipun gagal mengambil data tabel
+          }
+        }
+
+        // Perbarui dummyOrg untuk id=2 (backendId=5) dengan data tabel
+        if (dummyId === 2 && tableData) {
+          dummyOrg = {
+            ...dummyOrg,
+            industrialData: {
+              ...dummyOrg.industrialData,
+              districts: tableData.rows.map(row => ({
+                name: row.data.kecamatan,
+                count: parseInt(row.data['jumlah pedagang'])
+              }))
+            },
+            cardTitles: {
+              ...dummyOrg.cardTitles,
+              card3: tableData.description || dummyOrg.cardTitles.card3
+            }
+          };
+        }
+
+        const combinedOrganization = {
+          ...dummyOrg,
+          name: apiData.name || 'Nama Tidak Tersedia',
+          logo_url: apiData.logo_path || apiData.logo_url || '/images/default-organization.png',
+          description: apiData.description || 'Deskripsi tidak tersedia',
+          sector: apiData.sector?.name || 'Tidak ada sektor',
+          dataset_count: apiData.dataset_count || 0,
+          last_updated_formatted: apiData.last_updated_formatted || 'Belum pernah diperbarui'
+        };
+        console.log('Combined Organization:', combinedOrganization);
+
+        setOrganization(combinedOrganization);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching organization:', err);
+        setError(err.response?.status
+          ? `Request failed with status code ${err.response.status}: ${err.response.data?.message || 'Internal server error'}`
+          : err.message || 'Failed to connect to the server');
+        setLoading(false);
+      }
+    };
+
+    fetchOrganization();
+  }, [backendId]);
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#e8f1ff] to-[#d6e6ff]">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <p className="text-gray-700 mt-4">Memuat data...</p>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (error || !organization) {
     return (
       <Layout>
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#e8f1ff] to-[#d6e6ff]">
           <div className="bg-white p-8 rounded-lg shadow-md text-center">
-            <h1 className="text-2xl font-bold text-[#02033b] mb-4">Organisasi tidak ditemukan</h1>
+            <h1 className="text-2xl font-bold text-[#02033b] mb-4">
+              {error ? `Error: ${error}` : `Organisasi tidak ditemukan untuk ID: ${backendId}`}
+            </h1>
+            <p className="text-gray-600 mb-4">Silakan periksa log konsol untuk detail error atau coba lagi nanti.</p>
             <Link to="/organisasi" className="text-[#3a9ec9] hover:text-[#2a8bb7] flex items-center justify-center">
               <FiArrowLeft className="mr-2" />
               Kembali ke Daftar Organisasi
@@ -47,18 +462,19 @@ const OrganisasiDetailPage = () => {
 
   return (
     <Layout>
-      <div className="mbg-gradient-to-b from-[#e8f1ff] to-[#d6e6ff] min-h-screen pb-20">
+      <div className="bg-gradient-to-b from-[#e8f1ff] to-[#d6e6ff] min-h-screen pb-20">
         {/* Header */}
         <div className="bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] pt-32 pb-16 text-white relative overflow-hidden">
           <div className="container mx-auto px-4 relative z-10">
             <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
               <div className="flex flex-col md:flex-row items-start md:items-center gap-4 flex-1">
                 <div className="w-20 h-20 rounded-lg bg-white bg-opacity-20 flex items-center justify-center border-2 border-white border-opacity-30">
-                  <img src={organization.logo} alt={organization.name} className="w-12 h-12 object-contain" />
+                  <img src={organization.logo_url} alt={organization.name} className="w-12 h-12 object-contain" />
                 </div>
                 <div>
                   <h1 className="text-3xl font-bold uppercase">{organization.name}</h1>
                   <p className="text-xl opacity-90">{organization.sector}</p>
+                  <p className="text-sm opacity-80 mt-2">{organization.last_updated_formatted}</p>
                   <p className="text-sm opacity-80 mt-2 max-w-2xl">{organization.description}</p>
                 </div>
               </div>
@@ -70,7 +486,7 @@ const OrganisasiDetailPage = () => {
         <div className="container mx-auto px-4 py-8">
           {/* Baris pertama - 3 box dengan ukuran yang sama */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            {/* Card 1: Industri Terdaftar - Ukuran seperti pada gambar */}
+            {/* Card 1: Industri Terdaftar */}
             <div className="bg-white rounded-lg shadow p-4">
               <div className="flex items-center mb-2">
                 <Database className="text-gray-500 mr-2" size={20} />
@@ -80,7 +496,7 @@ const OrganisasiDetailPage = () => {
               <div className="text-sm text-gray-500">Total Seluruh Sektor</div>
             </div>
 
-            {/* Card 2: Izin Ulasan - Ukuran seperti pada gambar */}
+            {/* Card 2: Izin Ulasan */}
             <div className="bg-white rounded-lg shadow p-4">
               <div className="flex items-center mb-2">
                 <Eye className="text-gray-500 mr-2" size={20} />
@@ -90,7 +506,7 @@ const OrganisasiDetailPage = () => {
               <div className="text-sm text-gray-500">Hingga Bulan Ini</div>
             </div>
 
-            {/* Card 3: Distribusi Industri - Ukuran seperti pada gambar */}
+            {/* Card 3: Distribusi Pedagang */}
             <div className="bg-white rounded-lg shadow p-4">
               <div className="flex items-center mb-2">
                 <Database className="text-gray-500 mr-2" size={20} />
@@ -107,12 +523,12 @@ const OrganisasiDetailPage = () => {
             </div>
           </div>
 
-          {/* Baris kedua - Layout sesuai gambar */}
+          {/* Baris kedua */}
           <div className="grid grid-cols-12 gap-4 mb-4">
-            {/* Box 1: Grafik Perkembangan - Mengambil 6 kolom */}
+            {/* Box 1: Grafik Perkembangan */}
             <div className="bg-white rounded-lg shadow p-4 col-span-12 md:col-span-6">
               <h3 className="font-medium text-gray-700 mb-2">{cardTitles.card4}</h3>
-              <div className="h-64"> {/* Tinggi lebih besar sesuai gambar */}
+              <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={developmentChartData}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -139,14 +555,14 @@ const OrganisasiDetailPage = () => {
               </div>
             </div>
 
-            {/* Box 2: Jumlah Alat Ukur Valid - Mengambil 3 kolom */}
+            {/* Box 2: Jumlah Alat Ukur Valid */}
             <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center justify-center col-span-12 md:col-span-3 h-full">
               <img src="/images/ukur.png" alt="Ikon alat ukur" className="w-12 h-12 mb-4" />
               <div className="text-4xl font-bold text-gray-800 mb-4">{industrialData.totalRegistered.toLocaleString()}</div>
               <span className="font-medium text-gray-700 text-center">{cardTitles.card5}</span>
             </div>
 
-            {/* Box 3: Frekuensi Pengujian Alat Tera - Mengambil 3 kolom */}
+            {/* Box 3: Frekuensi Pengujian Alat Tera */}
             <div className="bg-white rounded-lg shadow p-4 flex flex-col items-center col-span-12 md:col-span-3">
               <h3 className="font-medium text-gray-700 mb-2 text-center">{cardTitles.card6}</h3>
               <div className="h-48 w-full">
@@ -158,7 +574,7 @@ const OrganisasiDetailPage = () => {
                       cy="50%"
                       labelLine={false}
                       label={renderCustomizedLabel}
-                      innerRadius={40}  // This creates the donut hole
+                      innerRadius={40}
                       outerRadius={70}
                       fill="#8884d8"
                       dataKey="value"
@@ -184,9 +600,9 @@ const OrganisasiDetailPage = () => {
             </div>
           </div>
 
-          {/* Baris ketiga - Layout sesuai gambar */}
+          {/* Baris ketiga */}
           <div className="grid grid-cols-12 gap-4 mb-4">
-            {/* Index Harga Pasar - Mengambil 6 kolom */}
+            {/* Index Harga Pasar */}
             <div className="bg-white rounded-lg shadow p-4 col-span-12 md:col-span-6">
               <h3 className="font-medium text-gray-700 mb-3">{cardTitles.card7}</h3>
               <div className="grid grid-cols-5 gap-2">
@@ -202,7 +618,7 @@ const OrganisasiDetailPage = () => {
               </div>
             </div>
 
-            {/* Update Harga Pasar Terkini - Mengambil 6 kolom */}
+            {/* Update Harga Pasar Terkini */}
             <div className="bg-white rounded-lg shadow p-4 col-span-12 md:col-span-6">
               <h3 className="font-medium text-gray-700 mb-3">{cardTitles.card8}</h3>
               <div className="overflow-x-auto">
