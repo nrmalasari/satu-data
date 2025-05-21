@@ -3,13 +3,13 @@ import { Link, useParams } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Database, Eye } from 'lucide-react';
-import { 
+import {
   LineChart, Line, PieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer 
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
 import { getOrganizationById, getTableById } from '../services/api';
 
-// Dummy organizations data
+// Dummy organizations data (tidak diubah, hanya untuk referensi)
 const organizations = [
   {
     id: 1,
@@ -79,11 +79,7 @@ const organizations = [
       permitsThisMonth: 210,
       districts: [] // Akan diisi dari API untuk id=5
     },
-    measurementData: [
-      { name: 'Balai Ukur Satuan', value: 35 },
-      { name: 'Alat Tera', value: 15 },
-      { name: 'Alat Tera Bantu', value: 50 }
-    ],
+    measurementData: [], // Akan diisi dari API
     developmentChartData: [
       { name: 'Jan', dataset1: 3, dataset2: 5 },
       { name: 'Feb', dataset1: 4, dataset2: 6 },
@@ -123,7 +119,7 @@ const organizations = [
       card3: "", // Akan diisi dari API description
       card4: "Grafik Perkembangan Pasar",
       card5: "Jumlah Alat Ukur Dagang Valid",
-      card6: "Frekuensi Pengujian Alat Dagang",
+      card6: "", // Akan diisi dari API description
       card7: "Index Harga Pasar",
       card8: "Update Harga Pasar Terkini"
     }
@@ -359,33 +355,61 @@ const OrganisasiDetailPage = () => {
         }
         console.log('Matched Dummy Org:', dummyOrg);
 
-        // Jika backendId adalah 5, ambil data tabel dari endpoint /organizations/5/tables/5
+        // Jika backendId adalah 5, ambil data tabel dari endpoint /organizations/5/tables/5 dan /organizations/5/tables/6
         let tableData = null;
+        let measurementTableData = null;
         if (backendId === 5) {
           try {
+            // Ambil data untuk Jumlah Pedagang (Card 3)
             tableData = await getTableById(5, 5);
-            console.log('Table Data:', tableData);
+            console.log('Table Data (ID 5):', tableData);
           } catch (tableError) {
-            console.error('Error fetching table data:', tableError);
+            console.error('Error fetching table data (ID 5):', tableError);
             // Lanjutkan meskipun gagal mengambil data tabel
+          }
+
+          try {
+            // Ambil data untuk Frekuensi Pengujian Alat Dagang (Card 6)
+            measurementTableData = await getTableById(5, 6);
+            console.log('Measurement Table Data (ID 6):', measurementTableData);
+          } catch (tableError) {
+            console.error('Error fetching measurement table data (ID 6):', tableError);
+            // Lanjutkan dengan data dummy jika gagal
           }
         }
 
         // Perbarui dummyOrg untuk id=2 (backendId=5) dengan data tabel
-        if (dummyId === 2 && tableData) {
+        if (dummyId === 2) {
+          let updatedDistricts = dummyOrg.industrialData.districts;
+          let updatedMeasurementData = dummyOrg.measurementData;
+          let updatedCardTitles = { ...dummyOrg.cardTitles };
+
+          // Update data untuk Jumlah Pedagang (Card 3)
+          if (tableData) {
+            updatedDistricts = tableData.rows.map(row => ({
+              name: row.data.kecamatan,
+              count: parseInt(row.data['jumlah pedagang'])
+            }));
+            updatedCardTitles.card3 = tableData.description || dummyOrg.cardTitles.card3;
+          }
+
+          // Update data untuk Frekuensi Pengujian Alat Dagang (Card 6)
+          if (measurementTableData) {
+            updatedMeasurementData = Object.entries(measurementTableData.rows[0].data).map(([name, value]) => ({
+              name,
+              value: parseInt(value)
+            }));
+            updatedCardTitles.card6 = measurementTableData.description || dummyOrg.cardTitles.card6;
+          }
+
           dummyOrg = {
             ...dummyOrg,
             industrialData: {
               ...dummyOrg.industrialData,
-              districts: tableData.rows.map(row => ({
-                name: row.data.kecamatan,
-                count: parseInt(row.data['jumlah pedagang'])
-              }))
+              districts: updatedDistricts
             },
-            cardTitles: {
-              ...dummyOrg.cardTitles,
-              card3: tableData.description || dummyOrg.cardTitles.card3
-            }
+            measurementData: updatedMeasurementData,
+            cardTitles: updatedCardTitles
           };
         }
 
@@ -448,14 +472,45 @@ const OrganisasiDetailPage = () => {
 
   const COLORS = ['#8A2BE2', '#4169E1', '#FF69B4'];
 
-  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
+  // Custom Tooltip Component untuk PieChart
+  const CustomTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      const data = payload[0];
+      return (
+        <div className="bg-white p-2 border border-gray-300 rounded shadow-md">
+          <p className="text-sm text-gray-700">{`${data.name}: ${data.value}`}</p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  // Custom Label untuk PieChart agar lebih dekat ke segmen
+  const renderCustomLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    value,
+    index,
+  }) => {
     const RADIAN = Math.PI / 180;
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    // Mengatur jarak label lebih dekat ke segmen (tambahkan hanya 10 piksel dari outerRadius)
+    const radius = outerRadius + 10;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
     return (
-      <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-        {`${(percent * 100).toFixed(0)}%`}
+      <text
+        x={x}
+        y={y}
+        fill="#000"
+        textAnchor={x > cx ? 'start' : 'end'}
+        dominantBaseline="central"
+        fontSize="12"
+      >
+        {value}
       </text>
     );
   };
@@ -536,17 +591,17 @@ const OrganisasiDetailPage = () => {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Line 
-                      type="monotone" 
-                      dataKey="dataset1" 
-                      stroke="#51c3f2" 
+                    <Line
+                      type="monotone"
+                      dataKey="dataset1"
+                      stroke="#51c3f2"
                       strokeWidth={2}
                       name="Dataset 1"
                     />
-                    <Line 
-                      type="monotone" 
-                      dataKey="dataset2" 
-                      stroke="#000000" 
+                    <Line
+                      type="monotone"
+                      dataKey="dataset2"
+                      stroke="#000000"
                       strokeWidth={2}
                       name="Dataset 2"
                     />
@@ -562,33 +617,32 @@ const OrganisasiDetailPage = () => {
               <span className="font-medium text-gray-700 text-center">{cardTitles.card5}</span>
             </div>
 
-            {/* Box 3: Frekuensi Pengujian Alat Tera */}
+            {/* Box 3: Frekuensi Pengujian Alat Dagang */}
             <div className="bg-white rounded-lg shadow p-4 flex flex-col items-center col-span-12 md:col-span-3">
               <h3 className="font-medium text-gray-700 mb-2 text-center">{cardTitles.card6}</h3>
-              <div className="h-48 w-full">
+              <div className="h-56 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
                       data={measurementData}
                       cx="50%"
                       cy="50%"
-                      labelLine={false}
-                      label={renderCustomizedLabel}
-                      innerRadius={40}
-                      outerRadius={70}
+                      label={renderCustomLabel} // Kembalikan label statis
+                      labelLine={false} // Tidak ada garis panjang
+                      innerRadius={50}
+                      outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
                       paddingAngle={5}
+                      isAnimationActive={true}
                     >
                       {measurementData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip 
-                      formatter={(value, name, props) => [`${value} (${(props.payload.percent * 100).toFixed(0)}%)`, name]}
-                    />
-                    <Legend 
-                      verticalAlign="bottom" 
+                    <Tooltip content={<CustomTooltip />} />
+                    <Legend
+                      verticalAlign="bottom"
                       height={36}
                       formatter={(value, entry, index) => (
                         <span className="text-xs">{value}</span>

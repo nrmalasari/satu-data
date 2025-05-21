@@ -127,10 +127,10 @@ const HomePage = () => {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between h-full pt-12 lg:pt-0">
             {/* Left Column - Title and Search */}
             <div className="w-full lg:w-1/2 mb-10 lg:mb-0 z-10 mt-10 lg:mt-0">
-              <h1 className="text-4xl sm:text-5xl lg:text-[64px] font-extrabold leading-tight lg:leading-[80px] text-[#02033b] tracking-tight">
-                Satu Data <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9]">
-                  Kota Parepare
+              <h1 className="text-4xl sm:text-4x1 lg:text-[64px] font-extrabold leading-tight lg:leading-[80px] text-[#02033b] tracking-tight">
+                Parepare<br />
+                <span className="text-transparent text-5xl bg-clip-text bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9]">
+                  Dalam Genggaman
                 </span>
               </h1>
               
