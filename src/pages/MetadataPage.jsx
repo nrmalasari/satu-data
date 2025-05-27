@@ -29,9 +29,8 @@ const MetadataPage = () => {
     const params = new URLSearchParams(location.search);
     const sector = params.get('sector');
     const year = params.get('year');
-    const query = params.get('q'); // Get the search query from URL
+    const query = params.get('q');
 
-    // Update state based on query parameters
     if (sector) {
       setSelectedSectors([decodeURIComponent(sector)]);
     }
@@ -39,7 +38,7 @@ const MetadataPage = () => {
       setSelectedYears([year]);
     }
     if (query) {
-      setSearchTerm(decodeURIComponent(query)); // Set searchTerm from URL query
+      setSearchTerm(decodeURIComponent(query));
     }
     setCurrentPage(1);
   }, [location.search]);
@@ -366,7 +365,7 @@ const MetadataPage = () => {
             </div>
 
             <div className="w-full lg:w-3/4">
-              <div className="bg-white rounded-xl shadow-md border border-gray-200 p-5 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+              <div className="bg-white rounded-xl shadow-md border border-gray-200 p-5 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center overflow-hidden">
                 <div className="flex items-center mb-3 sm:mb-0">
                   <div className="w-3 h-8 bg-gradient-to-b from-[#e18335] to-[#f6c041] rounded-full mr-3"></div>
                   <h2 className="font-bold text-[#02033b] text-xl">
@@ -378,7 +377,7 @@ const MetadataPage = () => {
                 <div className="flex items-center space-x-2 w-full sm:w-auto">
                   <span className="text-sm text-gray-500 whitespace-nowrap">Urutkan berdasarkan:</span>
                   <select
-                    className="border border-gray-300 rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3a9ec9] focus:border-transparent bg-white"
+                    className="border border-gray-300 rounded-lg text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3a9ec9] focus:border-transparent bg-white w-full sm:w-40 max-w-full"
                     value={sortBy}
                     onChange={handleSortChange}
                   >
@@ -450,14 +449,14 @@ const MetadataPage = () => {
                           </div>
                         </div>
                         <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
-                          <div className="flex justify-between text-sm text-gray-600 mb-2">
+                          <div className="flex justify-between text-sm sm">
                             <span>Tingkat popularitas dataset</span>
-                            <span>{Math.round((item.views || 0) / 30)}%</span>
+                            <span>{Math.round((item?.views || 0) / 30)}%</span>
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-2">
                             <div
                               className="bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] h-2 rounded-full"
-                              style={{ width: `${Math.min(100, (item.views || 0) / 30)}%` }}
+                              style={{ width: `${Math.min(100, (item.views || 0) / 3)}%` }}
                             ></div>
                           </div>
                         </div>
