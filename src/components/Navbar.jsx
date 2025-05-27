@@ -116,11 +116,6 @@ const Navbar = () => {
         <div className="p-8 h-full flex flex-col">
           <div className="flex justify-between items-center mb-12">
             <div className="flex items-center space-x-2">
-              <img
-                src="/path/to/logo.png" // Ganti dengan path logo Anda
-                alt="Logo Satu Data"
-                className="h-10 w-10 object-contain"
-              />
               <Link
                 to="/"
                 className="text-xl font-bold uppercase text-black"
