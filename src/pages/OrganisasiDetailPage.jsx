@@ -9,7 +9,6 @@ import {
 } from 'recharts';
 import { getOrganizationById, getTableById } from '../services/api';
 
-// Dummy organizations data (tidak diubah, hanya untuk referensi)
 const organizations = [
   {
     id: 1,
@@ -29,18 +28,18 @@ const organizations = [
       { name: 'Infrastruktur', value: 30 }
     ],
     developmentChartData: [
-      { name: 'Jan', dataset1: 5, dataset2: 7 },
-      { name: 'Feb', dataset1: 6, dataset2: 8 },
-      { name: 'Mar', dataset1: 8, dataset2: 6 },
-      { name: 'Apr', dataset1: 10, dataset2: 5 },
-      { name: 'Mei', dataset1: 12, dataset2: 7 },
-      { name: 'Jun', dataset1: 11, dataset2: 9 },
-      { name: 'Jul', dataset1: 9, dataset2: 10 },
-      { name: 'Agu', dataset1: 7, dataset2: 8 },
-      { name: 'Sep', dataset1: 9, dataset2: 6 },
-      { name: 'Okt', dataset1: 10, dataset2: 7 },
-      { name: 'Nov', dataset1: 8, dataset2: 9 },
-      { name: 'Des', dataset1: 6, dataset2: 10 }
+      { name: 'Jan', dataset1: 5, dataset2: 7, dataset3: 3, dataset4: 9, dataset5: 4 },
+      { name: 'Feb', dataset1: 6, dataset2: 8, dataset3: 4, dataset4: 10, dataset5: 5 },
+      { name: 'Mar', dataset1: 8, dataset2: 6, dataset3: 6, dataset4: 8, dataset5: 7 },
+      { name: 'Apr', dataset1: 10, dataset2: 5, dataset3: 7, dataset4: 7, dataset5: 6 },
+      { name: 'Mei', dataset1: 12, dataset2: 7, dataset3: 9, dataset4: 6, dataset5: 8 },
+      { name: 'Jun', dataset1: 11, dataset2: 9, dataset3: 8, dataset4: 5, dataset5: 9 },
+      { name: 'Jul', dataset1: 9, dataset2: 10, dataset3: 5, dataset4: 4, dataset5: 10 },
+      { name: 'Agu', dataset1: 7, dataset2: 8, dataset3: 3, dataset4: 6, dataset5: 7 },
+      { name: 'Sep', dataset1: 9, dataset2: 6, dataset3: 4, dataset4: 8, dataset5: 5 },
+      { name: 'Okt', dataset1: 10, dataset2: 7, dataset3: 6, dataset4: 9, dataset5: 4 },
+      { name: 'Nov', dataset1: 8, dataset2: 9, dataset3: 5, dataset4: 7, dataset5: 6 },
+      { name: 'Des', dataset1: 6, dataset2: 10, dataset3: 7, dataset4: 5, dataset5: 8 }
     ],
     marketPrices: [
       { name: 'Laptop', price: '15.000.000', unit: 'Unit', lastUpdate: '30 April 2025' },
@@ -77,23 +76,10 @@ const organizations = [
     industrialData: {
       totalRegistered: 1204,
       permitsThisMonth: 210,
-      districts: [] // Akan diisi dari API untuk id=5
+      districts: [] // Will be filled from API for id=5
     },
-    measurementData: [], // Akan diisi dari API
-    developmentChartData: [
-      { name: 'Jan', dataset1: 3, dataset2: 5 },
-      { name: 'Feb', dataset1: 4, dataset2: 6 },
-      { name: 'Mar', dataset1: 6, dataset2: 4 },
-      { name: 'Apr', dataset1: 8, dataset2: 3 },
-      { name: 'Mei', dataset1: 10, dataset2: 5 },
-      { name: 'Jun', dataset1: 9, dataset2: 7 },
-      { name: 'Jul', dataset1: 7, dataset2: 8 },
-      { name: 'Agu', dataset1: 5, dataset2: 6 },
-      { name: 'Sep', dataset1: 7, dataset2: 4 },
-      { name: 'Okt', dataset1: 8, dataset2: 5 },
-      { name: 'Nov', dataset1: 6, dataset2: 7 },
-      { name: 'Des', dataset1: 4, dataset2: 8 }
-    ],
+    measurementData: [], // Will be filled from API
+    developmentChartData: [], // Will be filled from API, but add fallback dummy data
     marketPrices: [
       { name: 'Beras Medium', price: '11.000', unit: 'Kg', lastUpdate: '30 April 2025' },
       { name: 'Cabe', price: '25.000', unit: 'Kg', lastUpdate: '30 April 2025' },
@@ -116,10 +102,10 @@ const organizations = [
     cardTitles: {
       card1: "Pedagang Terdaftar",
       card2: "Izin Usaha",
-      card3: "", // Akan diisi dari API description
+      card3: "", // Will be filled from API description
       card4: "Grafik Perkembangan Pasar",
       card5: "Jumlah Alat Ukur Dagang Valid",
-      card6: "", // Akan diisi dari API description
+      card6: "", // Will be filled from API description
       card7: "Index Harga Pasar",
       card8: "Update Harga Pasar Terkini"
     }
@@ -142,18 +128,18 @@ const organizations = [
       { name: 'Pengawasan', value: 20 }
     ],
     developmentChartData: [
-      { name: 'Jan', dataset1: 4, dataset2: 6 },
-      { name: 'Feb', dataset1: 5, dataset2: 7 },
-      { name: 'Mar', dataset1: 7, dataset2: 5 },
-      { name: 'Apr', dataset1: 9, dataset2: 4 },
-      { name: 'Mei', dataset1: 11, dataset2: 6 },
-      { name: 'Jun', dataset1: 10, dataset2: 8 },
-      { name: 'Jul', dataset1: 8, dataset2: 9 },
-      { name: 'Agu', dataset1: 6, dataset2: 7 },
-      { name: 'Sep', dataset1: 8, dataset2: 5 },
-      { name: 'Okt', dataset1: 9, dataset2: 6 },
-      { name: 'Nov', dataset1: 7, dataset2: 8 },
-      { name: 'Des', dataset1: 5, dataset2: 9 }
+      { name: 'Jan', dataset1: 4, dataset2: 6, dataset3: 2, dataset4: 8, dataset5: 3 },
+      { name: 'Feb', dataset1: 5, dataset2: 7, dataset3: 3, dataset4: 9, dataset5: 4 },
+      { name: 'Mar', dataset1: 7, dataset2: 5, dataset3: 5, dataset4: 7, dataset5: 6 },
+      { name: 'Apr', dataset1: 9, dataset2: 4, dataset3: 6, dataset4: 6, dataset5: 5 },
+      { name: 'Mei', dataset1: 11, dataset2: 6, dataset3: 8, dataset4: 5, dataset5: 7 },
+      { name: 'Jun', dataset1: 10, dataset2: 8, dataset3: 7, dataset4: 4, dataset5: 8 },
+      { name: 'Jul', dataset1: 8, dataset2: 9, dataset3: 4, dataset4: 3, dataset5: 9 },
+      { name: 'Agu', dataset1: 6, dataset2: 7, dataset3: 2, dataset4: 5, dataset5: 6 },
+      { name: 'Sep', dataset1: 8, dataset2: 5, dataset3: 3, dataset4: 7, dataset5: 4 },
+      { name: 'Okt', dataset1: 9, dataset2: 6, dataset3: 5, dataset4: 8, dataset5: 3 },
+      { name: 'Nov', dataset1: 7, dataset2: 8, dataset3: 4, dataset4: 6, dataset5: 5 },
+      { name: 'Des', dataset1: 5, dataset2: 9, dataset3: 6, dataset4: 4, dataset5: 7 }
     ],
     marketPrices: [
       { name: 'Sertifikasi', price: '500.000', unit: 'Dokumen', lastUpdate: '30 April 2025' },
@@ -203,18 +189,18 @@ const organizations = [
       { name: 'Edukasi', value: 30 }
     ],
     developmentChartData: [
-      { name: 'Jan', dataset1: 6, dataset2: 8 },
-      { name: 'Feb', dataset1: 7, dataset2: 9 },
-      { name: 'Mar', dataset1: 9, dataset2: 7 },
-      { name: 'Apr', dataset1: 11, dataset2: 6 },
-      { name: 'Mei', dataset1: 13, dataset2: 8 },
-      { name: 'Jun', dataset1: 12, dataset2: 10 },
-      { name: 'Jul', dataset1: 10, dataset2: 11 },
-      { name: 'Agu', dataset1: 8, dataset2: 9 },
-      { name: 'Sep', dataset1: 10, dataset2: 7 },
-      { name: 'Okt', dataset1: 11, dataset2: 8 },
-      { name: 'Nov', dataset1: 9, dataset2: 10 },
-      { name: 'Des', dataset1: 7, dataset2: 11 }
+      { name: 'Jan', dataset1: 6, dataset2: 8, dataset3: 4, dataset4: 10, dataset5: 5 },
+      { name: 'Feb', dataset1: 7, dataset2: 9, dataset3: 5, dataset4: 11, dataset5: 6 },
+      { name: 'Mar', dataset1: 9, dataset2: 7, dataset3: 7, dataset4: 9, dataset5: 8 },
+      { name: 'Apr', dataset1: 11, dataset2: 6, dataset3: 8, dataset4: 8, dataset5: 7 },
+      { name: 'Mei', dataset1: 13, dataset2: 8, dataset3: 10, dataset4: 7, dataset5: 9 },
+      { name: 'Jun', dataset1: 12, dataset2: 10, dataset3: 9, dataset4: 6, dataset5: 10 },
+      { name: 'Jul', dataset1: 10, dataset2: 11, dataset3: 6, dataset4: 5, dataset5: 11 },
+      { name: 'Agu', dataset1: 8, dataset2: 9, dataset3: 4, dataset4: 7, dataset5: 8 },
+      { name: 'Sep', dataset1: 10, dataset2: 7, dataset3: 5, dataset4: 9, dataset5: 6 },
+      { name: 'Okt', dataset1: 11, dataset2: 8, dataset3: 7, dataset4: 10, dataset5: 5 },
+      { name: 'Nov', dataset1: 9, dataset2: 10, dataset3: 6, dataset4: 8, dataset5: 7 },
+      { name: 'Des', dataset1: 7, dataset2: 11, dataset3: 8, dataset4: 6, dataset5: 9 }
     ],
     marketPrices: [
       { name: 'Alat KB', price: '300.000', unit: 'Unit', lastUpdate: '30 April 2025' },
@@ -264,18 +250,18 @@ const organizations = [
       { name: 'Evaluasi', value: 20 }
     ],
     developmentChartData: [
-      { name: 'Jan', dataset1: 2, dataset2: 4 },
-      { name: 'Feb', dataset1: 3, dataset2: 5 },
-      { name: 'Mar', dataset1: 5, dataset2: 3 },
-      { name: 'Apr', dataset1: 7, dataset2: 2 },
-      { name: 'Mei', dataset1: 9, dataset2: 4 },
-      { name: 'Jun', dataset1: 8, dataset2: 6 },
-      { name: 'Jul', dataset1: 6, dataset2: 7 },
-      { name: 'Agu', dataset1: 4, dataset2: 5 },
-      { name: 'Sep', dataset1: 6, dataset2: 3 },
-      { name: 'Okt', dataset1: 7, dataset2: 4 },
-      { name: 'Nov', dataset1: 5, dataset2: 6 },
-      { name: 'Des', dataset1: 3, dataset2: 7 }
+      { name: 'Jan', dataset1: 2, dataset2: 4, dataset3: 1, dataset4: 6, dataset5: 3 },
+      { name: 'Feb', dataset1: 3, dataset2: 5, dataset3: 2, dataset4: 7, dataset5: 4 },
+      { name: 'Mar', dataset1: 5, dataset2: 3, dataset3: 4, dataset4: 5, dataset5: 6 },
+      { name: 'Apr', dataset1: 7, dataset2: 2, dataset3: 5, dataset4: 4, dataset5: 5 },
+      { name: 'Mei', dataset1: 9, dataset2: 4, dataset3: 7, dataset4: 3, dataset5: 7 },
+      { name: 'Jun', dataset1: 8, dataset2: 6, dataset3: 6, dataset4: 2, dataset5: 8 },
+      { name: 'Jul', dataset1: 6, dataset2: 7, dataset3: 3, dataset4: 1, dataset5: 9 },
+      { name: 'Agu', dataset1: 4, dataset2: 5, dataset3: 1, dataset4: 3, dataset5: 6 },
+      { name: 'Sep', dataset1: 6, dataset2: 3, dataset3: 2, dataset4: 5, dataset5: 4 },
+      { name: 'Okt', dataset1: 7, dataset2: 4, dataset3: 4, dataset4: 6, dataset5: 3 },
+      { name: 'Nov', dataset1: 5, dataset2: 6, dataset3: 3, dataset4: 4, dataset5: 5 },
+      { name: 'Des', dataset1: 3, dataset2: 7, dataset3: 5, dataset4: 2, dataset5: 7 }
     ],
     marketPrices: [
       { name: 'Laporan Audit', price: '1.000.000', unit: 'Dokumen', lastUpdate: '30 April 2025' },
@@ -309,6 +295,24 @@ const organizations = [
   }
 ];
 
+// Fallback dummy data for id=2 if API fails
+const fallbackDevelopmentChartData = [
+  { name: 'Jan', dataset1: 4, dataset2: 6, dataset3: 3, dataset4: 8, dataset5: 5 },
+  { name: 'Feb', dataset1: 5, dataset2: 7, dataset3: 4, dataset4: 9, dataset5: 6 },
+  { name: 'Mar', dataset1: 6, dataset2: 5, dataset3: 5, dataset4: 7, dataset5: 7 },
+  { name: 'Apr', dataset1: 7, dataset2: 4, dataset3: 6, dataset4: 6, dataset5: 6 },
+  { name: 'Mei', dataset1: 8, dataset2: 6, dataset3: 7, dataset4: 5, dataset5: 8 },
+  { name: 'Jun', dataset1: 9, dataset2: 8, dataset3: 6, dataset4: 4, dataset5: 9 },
+  { name: 'Jul', dataset1: 7, dataset2: 9, dataset3: 4, dataset4: 3, dataset5: 10 },
+  { name: 'Agu', dataset1: 6, dataset2: 7, dataset3: 3, dataset4: 5, dataset5: 7 },
+  { name: 'Sep', dataset1: 8, dataset2: 5, dataset3: 4, dataset4: 7, dataset5: 6 },
+  { name: 'Okt', dataset1: 9, dataset2: 6, dataset3: 5, dataset4: 8, dataset5: 5 },
+  { name: 'Nov', dataset1: 7, dataset2: 8, dataset3: 4, dataset4: 6, dataset5: 7 },
+  { name: 'Des', dataset1: 5, dataset2: 9, dataset3: 6, dataset4: 5, dataset5: 8 }
+];
+
+
+// Komponen OrganisasiDetailPage
 const OrganisasiDetailPage = () => {
   const { id } = useParams();
   const backendId = parseInt(id);
@@ -322,94 +326,82 @@ const OrganisasiDetailPage = () => {
       setLoading(true);
       setError(null);
       try {
-        console.log(`Fetching organization with backendId: ${backendId}`);
         const response = await getOrganizationById(backendId);
-        console.log('API Response:', response);
-
         const apiData = response.data || response;
-        console.log('API Data:', apiData);
 
         if (!apiData || typeof apiData.id === 'undefined') {
           throw new Error('API response does not contain a valid ID');
         }
 
-        const apiId = apiData.id;
-        console.log('API ID:', apiId);
-
-        const idMapping = {
-          3: 1,
-          5: 2,
-          4: 3,
-          6: 4,
-          1: 5
-        };
-        const dummyId = idMapping[apiId];
+        const idMapping = { 3: 1, 5: 2, 4: 3, 6: 4, 1: 5 };
+        const dummyId = idMapping[apiData.id];
         if (dummyId === undefined) {
-          throw new Error(`No mapping found for API ID: ${apiId}`);
+          throw new Error(`No mapping found for API ID: ${apiData.id}`);
         }
-        console.log('Mapped Dummy ID:', dummyId);
 
-        let dummyOrg = organizations.find(org => org.id === dummyId);
+        let dummyOrg = organizations.find((org) => org.id === dummyId);
         if (!dummyOrg) {
           throw new Error(`No dummy organization found for mapped ID: ${dummyId}`);
         }
-        console.log('Matched Dummy Org:', dummyOrg);
 
-        // Jika backendId adalah 5, ambil data tabel dari endpoint /organizations/5/tables/5 dan /organizations/5/tables/6
+        // Fetch tambahan untuk backendId === 5
         let tableData = null;
         let measurementTableData = null;
+        let developmentTableData = null;
         if (backendId === 5) {
           try {
-            // Ambil data untuk Jumlah Pedagang (Card 3)
             tableData = await getTableById(5, 5);
-            console.log('Table Data (ID 5):', tableData);
-          } catch (tableError) {
-            console.error('Error fetching table data (ID 5):', tableError);
-            // Lanjutkan meskipun gagal mengambil data tabel
-          }
-
-          try {
-            // Ambil data untuk Frekuensi Pengujian Alat Dagang (Card 6)
             measurementTableData = await getTableById(5, 6);
-            console.log('Measurement Table Data (ID 6):', measurementTableData);
+            developmentTableData = await getTableById(5, 3);
           } catch (tableError) {
-            console.error('Error fetching measurement table data (ID 6):', tableError);
-            // Lanjutkan dengan data dummy jika gagal
+            console.error('Error fetching table data:', tableError);
           }
         }
 
-        // Perbarui dummyOrg untuk id=2 (backendId=5) dengan data tabel
+        // Update dummyOrg untuk id=2 (backendId=5)
         if (dummyId === 2) {
           let updatedDistricts = dummyOrg.industrialData.districts;
           let updatedMeasurementData = dummyOrg.measurementData;
+          let updatedDevelopmentChartData = dummyOrg.developmentChartData;
           let updatedCardTitles = { ...dummyOrg.cardTitles };
 
-          // Update data untuk Jumlah Pedagang (Card 3)
           if (tableData) {
-            updatedDistricts = tableData.rows.map(row => ({
+            updatedDistricts = tableData.rows.map((row) => ({
               name: row.data.kecamatan,
-              count: parseInt(row.data['jumlah pedagang'])
+              count: parseInt(row.data['jumlah pedagang']),
             }));
             updatedCardTitles.card3 = tableData.description || dummyOrg.cardTitles.card3;
           }
 
-          // Update data untuk Frekuensi Pengujian Alat Dagang (Card 6)
           if (measurementTableData) {
             updatedMeasurementData = Object.entries(measurementTableData.rows[0].data).map(([name, value]) => ({
               name,
-              value: parseInt(value)
+              value: parseInt(value),
             }));
             updatedCardTitles.card6 = measurementTableData.description || dummyOrg.cardTitles.card6;
           }
 
+          if (developmentTableData) {
+            const years = ['2020', '2021', '2022', '2023', '2024'];
+            updatedDevelopmentChartData = years.map((year) => {
+              const dataPoint = { name: year };
+              developmentTableData.rows.forEach((row) => {
+                const category = row.data['golongan usaha'].toLowerCase().replace(/\s+/g, '_');
+                dataPoint[category] = parseInt(row.data[year]);
+              });
+              return dataPoint;
+            });
+            updatedCardTitles.card4 = developmentTableData.description || dummyOrg.cardTitles.card4;
+          } else {
+            updatedDevelopmentChartData = fallbackDevelopmentChartData;
+          }
+
           dummyOrg = {
             ...dummyOrg,
-            industrialData: {
-              ...dummyOrg.industrialData,
-              districts: updatedDistricts
-            },
+            industrialData: { ...dummyOrg.industrialData, districts: updatedDistricts },
             measurementData: updatedMeasurementData,
-            cardTitles: updatedCardTitles
+            developmentChartData: updatedDevelopmentChartData,
+            cardTitles: updatedCardTitles,
           };
         }
 
@@ -420,14 +412,12 @@ const OrganisasiDetailPage = () => {
           description: apiData.description || 'Deskripsi tidak tersedia',
           sector: apiData.sector?.name || 'Tidak ada sektor',
           dataset_count: apiData.dataset_count || 0,
-          last_updated_formatted: apiData.last_updated_formatted || 'Belum pernah diperbarui'
+          last_updated_formatted: apiData.last_updated_formatted || 'Belum pernah diperbarui',
         };
-        console.log('Combined Organization:', combinedOrganization);
 
         setOrganization(combinedOrganization);
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching organization:', err);
         setError(err.response?.status
           ? `Request failed with status code ${err.response.status}: ${err.response.data?.message || 'Internal server error'}`
           : err.message || 'Failed to connect to the server');
@@ -443,7 +433,6 @@ const OrganisasiDetailPage = () => {
       <Layout>
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#e8f1ff] to-[#d6e6ff]">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-          <p className="text-gray-700 mt-4">Memuat data...</p>
         </div>
       </Layout>
     );
@@ -457,10 +446,8 @@ const OrganisasiDetailPage = () => {
             <h1 className="text-2xl font-bold text-[#02033b] mb-4">
               {error ? `Error: ${error}` : `Organisasi tidak ditemukan untuk ID: ${backendId}`}
             </h1>
-            <p className="text-gray-600 mb-4">Silakan periksa log konsol untuk detail error atau coba lagi nanti.</p>
             <Link to="/organisasi" className="text-[#3a9ec9] hover:text-[#2a8bb7] flex items-center justify-center">
-              <FiArrowLeft className="mr-2" />
-              Kembali ke Daftar Organisasi
+              <FiArrowLeft className="mr-2" /> Kembali ke Daftar Organisasi
             </Link>
           </div>
         </div>
@@ -470,57 +457,52 @@ const OrganisasiDetailPage = () => {
 
   const { industrialData, measurementData, developmentChartData, marketPrices, foodProducts, cardTitles } = organization;
 
-  const COLORS = ['#8A2BE2', '#4169E1', '#FF69B4'];
+  const COLORS = ['#8A2BE2', '#4169E1', '#FF69B4', '#00CED1', '#FF4500'];
 
-  // Custom Tooltip Component untuk PieChart
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
-      const data = payload[0];
       return (
         <div className="bg-white p-2 border border-gray-300 rounded shadow-md">
-          <p className="text-sm text-gray-700">{`${data.name}: ${data.value}`}</p>
+          {payload.map((entry, index) => (
+            <p key={index} className="text-sm" style={{ color: entry.color }}>
+              {`${entry.name}: ${entry.value}`}
+            </p>
+          ))}
         </div>
       );
     }
     return null;
   };
 
-  // Custom Label untuk PieChart agar lebih dekat ke segmen
-  const renderCustomLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    value,
-    index,
-  }) => {
+  const renderCustomLabel = ({ cx, cy, midAngle, outerRadius, value }) => {
     const RADIAN = Math.PI / 180;
-    // Mengatur jarak label lebih dekat ke segmen (tambahkan hanya 10 piksel dari outerRadius)
     const radius = outerRadius + 10;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
     return (
-      <text
-        x={x}
-        y={y}
-        fill="#000"
-        textAnchor={x > cx ? 'start' : 'end'}
-        dominantBaseline="central"
-        fontSize="12"
-      >
+      <text x={x} y={y} fill="#000" textAnchor={x > cx ? 'start' : 'end'} fontSize="12">
         {value}
       </text>
     );
   };
 
+  // Definisi lineKeys yang lebih ringkas
+  const lineKeys = [
+    { dataKey: developmentChartData[0]?.unit_usaha ? 'unit_usaha' : 'dataset1', name: 'Unit Usaha', color: COLORS[0] },
+    { dataKey: developmentChartData[0]?.['tenaga_kerja_(orang)'] ? 'tenaga_kerja_(orang)' : 'dataset2', name: 'Tenaga Kerja', color: COLORS[1] },
+    { dataKey: developmentChartData[0]?.nilai_investasi ? 'nilai_investasi' : 'dataset3', name: 'Nilai Investasi', color: COLORS[2] },
+    { dataKey: developmentChartData[0]?.nilai_produksi ? 'nilai_produksi' : 'dataset4', name: 'Nilai Produksi', color: COLORS[3] },
+    { dataKey: developmentChartData[0]?.nilai_bahan_baku ? 'nilai_bahan_baku' : 'dataset5', name: 'Nilai Bahan Baku', color: COLORS[4] },
+  ];
+
+  const chartData = developmentChartData.length > 0 ? developmentChartData : fallbackDevelopmentChartData;
+
   return (
     <Layout>
       <div className="bg-gradient-to-b from-[#e8f1ff] to-[#d6e6ff] min-h-screen pb-20">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] pt-32 pb-16 text-white relative overflow-hidden">
-          <div className="container mx-auto px-4 relative z-10">
+        {/* Header tetap sama */}
+        <div className="bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] pt-32 pb-16 text-white">
+          <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
               <div className="flex flex-col md:flex-row items-start md:items-center gap-4 flex-1">
                 <div className="w-20 h-20 rounded-lg bg-white bg-opacity-20 flex items-center justify-center border-2 border-white border-opacity-30">
@@ -539,29 +521,24 @@ const OrganisasiDetailPage = () => {
 
         {/* Main Content */}
         <div className="container mx-auto px-4 py-8">
-          {/* Baris pertama - 3 box dengan ukuran yang sama */}
+          {/* First Row tetap sama */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            {/* Card 1: Industri Terdaftar */}
             <div className="bg-white rounded-lg shadow p-4">
               <div className="flex items-center mb-2">
                 <Database className="text-gray-500 mr-2" size={20} />
                 <span className="font-medium text-gray-700">{cardTitles.card1}</span>
               </div>
-              <div className="text-4xl font-bold">{industrialData.totalRegistered.toLocaleString()}</div>
+              <div className="text-3xl font-bold">{industrialData.totalRegistered.toLocaleString()}</div>
               <div className="text-sm text-gray-500">Total Seluruh Sektor</div>
             </div>
-
-            {/* Card 2: Izin Ulasan */}
             <div className="bg-white rounded-lg shadow p-4">
               <div className="flex items-center mb-2">
                 <Eye className="text-gray-500 mr-2" size={20} />
                 <span className="font-medium text-gray-700">{cardTitles.card2}</span>
               </div>
-              <div className="text-4xl font-bold">{industrialData.permitsThisMonth.toLocaleString()}</div>
+              <div className="text-3xl font-bold">{industrialData.permitsThisMonth.toLocaleString()}</div>
               <div className="text-sm text-gray-500">Hingga Bulan Ini</div>
             </div>
-
-            {/* Card 3: Distribusi Pedagang */}
             <div className="bg-white rounded-lg shadow p-4">
               <div className="flex items-center mb-2">
                 <Database className="text-gray-500 mr-2" size={20} />
@@ -578,85 +555,87 @@ const OrganisasiDetailPage = () => {
             </div>
           </div>
 
-          {/* Baris kedua */}
+          {/* Second Row - Grafik Perkembangan Diperbarui */}
           <div className="grid grid-cols-12 gap-4 mb-4">
-            {/* Box 1: Grafik Perkembangan */}
             <div className="bg-white rounded-lg shadow p-4 col-span-12 md:col-span-6">
               <h3 className="font-medium text-gray-700 mb-2">{cardTitles.card4}</h3>
-              <div className="h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={developmentChartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" interval="preserveStartEnd" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Line
-                      type="monotone"
-                      dataKey="dataset1"
-                      stroke="#51c3f2"
-                      strokeWidth={2}
-                      name="Dataset 1"
+              <div className="h-64"> {/* Ubah dari h-56 ke h-64 untuk ruang lebih */}
+                <ResponsiveContainer width="100%" height="100%" minHeight={256}>
+                  <LineChart data={chartData} margin={{ top: 10, right: 20, left: 0, bottom: 10 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis
+                      dataKey="name"
+                      interval="preserveStartEnd"
+                      tick={{ fontSize: 12, fill: '#4b5563' }}
+                      stroke="#6b7280"
                     />
-                    <Line
-                      type="monotone"
-                      dataKey="dataset2"
-                      stroke="#000000"
-                      strokeWidth={2}
-                      name="Dataset 2"
+                    <YAxis
+                      domain={[0, 'auto']} // Pastikan sumbu Y mulai dari 0
+                      tick={{ fontSize: 12, fill: '#4b5563' }}
+                      stroke="#6b7280"
+                      allowDecimals={false} // Hindari desimal untuk data integer
                     />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Legend
+                      verticalAlign="top"
+                      height={36}
+                      formatter={(value) => <span className="text-sm text-gray-700">{value}</span>}
+                    />
+                    {lineKeys.map((line, index) => (
+                      <Line
+                        key={index}
+                        type="monotone"
+                        dataKey={line.dataKey}
+                        stroke={line.color}
+                        strokeWidth={2}
+                        name={line.name}
+                        dot={false}
+                      />
+                    ))}
                   </LineChart>
                 </ResponsiveContainer>
               </div>
             </div>
 
-            {/* Box 2: Jumlah Alat Ukur Valid */}
+            {/* Box 2 dan 3 tetap sama */}
             <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center justify-center col-span-12 md:col-span-3 h-full">
               <img src="/images/ukur.png" alt="Ikon alat ukur" className="w-12 h-12 mb-4" />
-              <div className="text-4xl font-bold text-gray-800 mb-4">{industrialData.totalRegistered.toLocaleString()}</div>
+              <div className="text-3xl font-bold text-gray-800 mb-4">
+                {industrialData.totalRegistered.toLocaleString()}
+              </div>
               <span className="font-medium text-gray-700 text-center">{cardTitles.card5}</span>
             </div>
-
-            {/* Box 3: Frekuensi Pengujian Alat Dagang */}
             <div className="bg-white rounded-lg shadow p-4 flex flex-col items-center col-span-12 md:col-span-3">
               <h3 className="font-medium text-gray-700 mb-2 text-center">{cardTitles.card6}</h3>
-              <div className="h-56 w-full">
+              <div className="h-64 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
                       data={measurementData}
                       cx="50%"
                       cy="50%"
-                      label={renderCustomLabel} // Kembalikan label statis
-                      labelLine={false} // Tidak ada garis panjang
+                      label={renderCustomLabel}
+                      labelLine={false}
                       innerRadius={50}
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
                       paddingAngle={5}
-                      isAnimationActive={true}
                     >
                       {measurementData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
                     <Tooltip content={<CustomTooltip />} />
-                    <Legend
-                      verticalAlign="bottom"
-                      height={36}
-                      formatter={(value, entry, index) => (
-                        <span className="text-xs">{value}</span>
-                      )}
-                    />
+                    <Legend verticalAlign="bottom" height={36} formatter={(value) => <span className="text-xs">{value}</span>} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
             </div>
           </div>
 
-          {/* Baris ketiga */}
+          {/* Third Row tetap sama */}
           <div className="grid grid-cols-12 gap-4 mb-4">
-            {/* Index Harga Pasar */}
             <div className="bg-white rounded-lg shadow p-4 col-span-12 md:col-span-6">
               <h3 className="font-medium text-gray-700 mb-3">{cardTitles.card7}</h3>
               <div className="grid grid-cols-5 gap-2">
@@ -671,8 +650,6 @@ const OrganisasiDetailPage = () => {
                 </div>
               </div>
             </div>
-
-            {/* Update Harga Pasar Terkini */}
             <div className="bg-white rounded-lg shadow p-4 col-span-12 md:col-span-6">
               <h3 className="font-medium text-gray-700 mb-3">{cardTitles.card8}</h3>
               <div className="overflow-x-auto">

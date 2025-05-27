@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import CountUp from 'react-countup';
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom"; // Added Link import
+import { Link, useNavigate } from "react-router-dom"; // Added useNavigate
 import { 
   getSectors, 
   getInfografis, 
@@ -25,10 +25,9 @@ const HomePage = () => {
   });
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [showSearchResults, setShowSearchResults] = useState(false);
   const infografisRef = useRef(null);
   const [showAllSectors, setShowAllSectors] = useState(false);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   // Fetch all initial data
   useEffect(() => {
@@ -60,23 +59,12 @@ const HomePage = () => {
   }, []);
 
   // Handle search functionality
-  const handleSearch = async () => {
+  const handleSearch = () => {
     if (!searchQuery.trim()) {
-      setShowSearchResults(false);
       return;
     }
-
-    try {
-      setData(prev => ({ ...prev, loading: true }));
-      const results = await searchData(searchQuery);
-      setSearchResults(results);
-      setShowSearchResults(true);
-    } catch (error) {
-      console.error('Search failed:', error);
-      setSearchResults([]);
-    } finally {
-      setData(prev => ({ ...prev, loading: false }));
-    }
+    // Redirect to metadata page with search query
+    navigate(`/metadata?q=${encodeURIComponent(searchQuery)}`);
   };
 
   // Carousel controls
@@ -127,9 +115,9 @@ const HomePage = () => {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between h-full pt-12 lg:pt-0">
             {/* Left Column - Title and Search */}
             <div className="w-full lg:w-1/2 mb-10 lg:mb-0 z-10 mt-10 lg:mt-0">
-              <h1 className="text-4xl sm:text-4x1 lg:text-[64px] font-extrabold leading-tight lg:leading-[80px] text-[#02033b] tracking-tight">
+              <h1 className="text-4xl sm:text-4xl lg:text-[64px] font-extrabold leading-tight lg:leading-[80px] text-[#02033b] tracking-tight">
                 Parepare<br />
-                <span className="text-transparent text-5xl bg-clip-text bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9]">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] text-4xl sm:text-4xl lg:text-[64px]">
                   Dalam Genggaman
                 </span>
               </h1>
@@ -162,7 +150,6 @@ const HomePage = () => {
               <div className="mt-8 sm:mt-10">
                 <button 
                   onClick={() => {
-                    setShowSearchResults(false);
                     document.getElementById('sektor-section')?.scrollIntoView({ behavior: 'smooth' });
                   }}
                   className="w-48 h-12 bg-gradient-to-r from-[#f6c041] to-[#e18335] hover:from-[#e0a82a] hover:to-[#d1721a] rounded-xl text-white font-bold flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 text-base group"
@@ -239,223 +226,167 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Search Results Section */}
-      {showSearchResults && (
-        <section className="py-12 bg-white">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#02033b]">
-                Hasil Pencarian: "{searchQuery}"
+      {/* Infografis Section */}
+      <section className="py-16 sm:py-20 lg:py-28 bg-white z-10">
+        <div className="container mx-auto px-0"> 
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-10 px-4 sm:px-6">
+            <div className="flex items-center mb-4 sm:mb-0">
+              <div className="w-3 h-10 bg-gradient-to-b from-[#e18335] to-[#f6c041] rounded-full mr-4"></div>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#02033b]">
+                Infografis <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9]">Terbaru</span>
               </h2>
-              <button 
-                onClick={() => setShowSearchResults(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
             </div>
+          </div>
+
+          <div className="relative">
+            <button 
+              onClick={scrollLeft}
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-50 transition-all z-10 group"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600 group-hover:text-[#51c3f2]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
             
-            {searchResults.length > 0 ? (
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {searchResults.map(dataset => (
-                  <div key={dataset.id} className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow">
-                    <div className="p-6">
-                      <h3 className="text-xl font-bold text-[#02033b] mb-2">{dataset.title}</h3>
-                      <p className="text-gray-600 mb-4 line-clamp-2">{dataset.description}</p>
-                      <div className="flex items-center text-sm text-gray-500 mb-4">
-                        <span>{dataset.organization?.name}</span>
-                        <span className="mx-2">•</span>
-                        <span>{dataset.sector?.name}</span>
-                      </div>
-                      <a 
-                        href={dataset.file_url} 
-                        download
-                        className="inline-flex items-center text-[#51c3f2] font-medium hover:text-[#3a9ec9]"
-                      >
-                        Unduh Dataset
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                        </svg>
-                      </a>
+            <div 
+              ref={infografisRef}
+              className="overflow-x-auto w-full py-4 no-scrollbar px-4 sm:px-6"
+            >
+              <div className="flex gap-6 w-max">
+                {data.infografis.map((item) => (
+                  <Link
+                    key={item.id}
+                    to={`/infografis/${item.id}`}
+                    className="flex-shrink-0 w-[280px] sm:w-[320px] lg:w-[360px] bg-white rounded-2xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 group/card"
+                  >
+                    <div className="relative overflow-hidden h-48 sm:h-56 lg:h-64">
+                      <img 
+                        src={item.image_url} 
+                        alt={item.title}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.src = '/images/default-infografis.jpg';
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
                     </div>
-                  </div>
+                    <div className="p-5 sm:p-6">
+                      <h3 className="text-lg sm:text-xl font-bold text-[#02033b] mb-3 group-hover/card:text-[#51c3f2] transition-colors">
+                        {item.title}
+                      </h3>
+                      <div className="flex items-center text-[#51c3f2] font-semibold text-sm sm:text-base group-hover:text-[#3a9ec9] transition-colors">
+                        Lihat Halaman
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                      </div>
+                    </div>
+                  </Link>
                 ))}
               </div>
-            ) : (
-              <div className="text-center py-12">
-                <p className="text-gray-500">Tidak ada hasil ditemukan untuk pencarian Anda</p>
-              </div>
-            )}
-          </div>
-        </section>
-      )}
-
-      {/* Infografis Section */}
-      {!showSearchResults && (
-        <section className="py-16 sm:py-20 lg:py-28 bg-white z-10">
-          <div className="container mx-auto px-0"> 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-10 px-4 sm:px-6">
-              <div className="flex items-center mb-4 sm:mb-0">
-                <div className="w-3 h-10 bg-gradient-to-b from-[#e18335] to-[#f6c041] rounded-full mr-4"></div>
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#02033b]">
-                  Infografis <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9]">Terbaru</span>
-                </h2>
-              </div>
             </div>
 
-            <div className="relative">
-              <button 
-                onClick={scrollLeft}
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-50 transition-all z-10 group"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600 group-hover:text-[#51c3f2]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-              
-              <div 
-                ref={infografisRef}
-                className="overflow-x-auto w-full py-4 no-scrollbar px-4 sm:px-6"
-              >
-                <div className="flex gap-6 w-max">
-                  {data.infografis.map((item) => (
-                    <div 
-                      key={item.id} 
-                      className="flex-shrink-0 w-[280px] sm:w-[320px] lg:w-[360px] bg-white rounded-2xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 group/card"
-                    >
-                      <div className="relative overflow-hidden h-48 sm:h-56 lg:h-64">
-                        <img 
-                          src={item.image_url} 
-                          alt={item.title}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            e.target.src = '/images/default-infografis.jpg';
-                          }}
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-                      </div>
-                      <div className="p-5 sm:p-6">
-                        <h3 className="text-lg sm:text-xl font-bold text-[#02033b] mb-3 group-hover/card:text-[#51c3f2] transition-colors">
-                          {item.title}
-                        </h3>
-                        <button className="flex items-center text-[#51c3f2] font-semibold text-sm sm:text-base group-hover:text-[#3a9ec9] transition-colors">
-                          Lihat Halaman
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <button 
-                onClick={scrollRight}
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-50 transition-all z-10 group"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600 group-hover:text-[#51c3f2]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
+            <button 
+              onClick={scrollRight}
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-50 transition-all z-10 group"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600 group-hover:text-[#51c3f2]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       {/* Data Sektor Section */}
-      {!showSearchResults && (
-        <section id="sektor-section" className="py-16 sm:py-20 lg:py-28 bg-gradient-to-b from-white to-[#f8fafd]">
-          <div className="container mx-auto px-4 sm:px-6">
-            <div className="text-center mb-12 sm:mb-16">
-              <div className="inline-flex items-center mb-4">
-                <div className="w-3 h-10 bg-gradient-to-b from-[#e18335] to-[#f6c041] rounded-full mr-4"></div>
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#02033b]">
-                  Jelajahi Data <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9]">Berdasarkan Sektor</span>
-                </h2>
-              </div>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Temukan data yang Anda butuhkan berdasarkan kategori sektor tertentu
-              </p>
+      <section id="sektor-section" className="py-16 sm:py-20 lg:py-28 bg-gradient-to-b from-white to-[#f8fafd]">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12 sm:mb-16">
+            <div className="inline-flex items-center mb-4">
+              <div className="w-3 h-10 bg-gradient-to-b from-[#e18335] to-[#f6c041] rounded-full mr-4"></div>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#02033b]">
+                Jelajahi Data <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9]">Berdasarkan Sektor</span>
+              </h2>
             </div>
-            
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
-              {(showAllSectors ? data.sectors : data.sectors.slice(0, 10)).map((sector, index) => (
-                <Link
-                  key={sector.id}
-                  to={`/metadata?sector=${encodeURIComponent(sector.name)}`}
-                  className="block"
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Temukan data yang Anda butuhkan berdasarkan kategori sektor tertentu
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+            {(showAllSectors ? data.sectors : data.sectors.slice(0, 10)).map((sector, index) => (
+              <Link
+                key={sector.id}
+                to={`/metadata?sector=${encodeURIComponent(sector.name)}`}
+                className="block"
+              >
+                <motion.div 
+                  initial={{ opacity: 0, y: 50, scale: 0.95 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: false, margin: "-50px" }}
+                  transition={{ 
+                    duration: 0.8,
+                    delay: index * 0.1,
+                    ease: "backOut"
+                  }}
+                  whileHover={{ 
+                    y: -8,
+                    scale: 1.03,
+                    transition: { duration: 0.3 }
+                  }}
+                  className="bg-white rounded-xl border border-gray-100 p-4 sm:p-5 flex flex-col items-center hover:shadow-lg hover:border-transparent group relative overflow-hidden"
                 >
                   <motion.div 
-                    initial={{ opacity: 0, y: 50, scale: 0.95 }}
-                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                    viewport={{ once: false, margin: "-50px" }}
-                    transition={{ 
-                      duration: 0.8,
-                      delay: index * 0.1,
-                      ease: "backOut"
-                    }}
-                    whileHover={{ 
-                      y: -8,
-                      scale: 1.03,
-                      transition: { duration: 0.3 }
-                    }}
-                    className="bg-white rounded-xl border border-gray-100 p-4 sm:p-5 flex flex-col items-center hover:shadow-lg hover:border-transparent group relative overflow-hidden"
-                  >
-                    <motion.div 
-                      className="absolute inset-0 bg-gradient-to-br from-[#51c3f2]/15 to-[#f6c041]/15 opacity-0 group-hover:opacity-100"
+                    className="absolute inset-0 bg-gradient-to-br from-[#51c3f2]/15 to-[#f6c041]/15 opacity-0 group-hover:opacity-100"
+                    transition={{ duration: 0.4 }}
+                  />
+                  
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 rounded-2xl mb-4 overflow-hidden flex items-center justify-center p-3 sm:p-4 relative z-10">
+                    <motion.img 
+                      src={sector.icon_url || '/images/default-sector.png'}
+                      alt={sector.name}
+                      className="w-full h-full object-contain"
+                      whileHover={{ scale: 1.15 }}
                       transition={{ duration: 0.4 }}
                     />
-                    
-                    <div className="w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 rounded-2xl mb-4 overflow-hidden flex items-center justify-center p-3 sm:p-4 relative z-10">
-                      <motion.img 
-                        src={sector.icon_url || '/images/default-sector.png'}
-                        alt={sector.name}
-                        className="w-full h-full object-contain"
-                        whileHover={{ scale: 1.15 }}
-                        transition={{ duration: 0.4 }}
-                      />
-                    </div>
-                    <h3 className="text-center text-sm sm:text-base font-medium text-[#02033b] group-hover:text-[#51c3f2] transition-colors relative z-10">
-                      {sector.name}
-                    </h3>
-                  </motion.div>
-                </Link>
-              ))}
-            </div>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false }}
-              transition={{ 
-                delay: 0.8, 
-                duration: 0.8,
-                ease: "backOut"
-              }}
-              className="mt-12 sm:mt-16 text-center"
-            >
-              <button 
-                onClick={() => setShowAllSectors(!showAllSectors)}
-                className="px-8 py-3 bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] hover:from-[#3a9ec9] hover:to-[#2a8bb7] text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 inline-flex items-center text-base"
-              >
-                {showAllSectors ? 'Sembunyikan Beberapa Sektor' : 'Lihat Semua Sektor'}
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  className={`h-5 w-5 ml-2 transition-transform ${showAllSectors ? 'rotate-180' : ''}`} 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-            </motion.div>
+                  </div>
+                  <h3 className="text-center text-sm sm:text-base font-medium text-[#02033b] group-hover:text-[#51c3f2] transition-colors relative z-10">
+                    {sector.name}
+                  </h3>
+                </motion.div>
+              </Link>
+            ))}
           </div>
-        </section>
-      )}
+          
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false }}
+            transition={{ 
+              delay: 0.8, 
+              duration: 0.8,
+              ease: "backOut"
+            }}
+            className="mt-12 sm:mt-16 text-center"
+          >
+            <button 
+              onClick={() => setShowAllSectors(!showAllSectors)}
+              className="px-8 py-3 bg-gradient-to-r from-[#51c3f2] to-[#3a9ec9] hover:from-[#3a9ec9] hover:to-[#2a8bb7] text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 inline-flex items-center text-base"
+            >
+              {showAllSectors ? 'Sembunyikan Beberapa Sektor' : 'Lihat Semua Sektor'}
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                className={`h-5 w-5 ml-2 transition-transform ${showAllSectors ? 'rotate-180' : ''}`} 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          </motion.div>
+        </div>
+      </section>
     </Layout>
   );
 };

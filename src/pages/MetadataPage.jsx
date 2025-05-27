@@ -24,20 +24,27 @@ const MetadataPage = () => {
 
   const location = useLocation();
 
+  // Extract query parameters and update state
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const sector = params.get('sector');
     const year = params.get('year');
+    const query = params.get('q'); // Get the search query from URL
 
+    // Update state based on query parameters
     if (sector) {
       setSelectedSectors([decodeURIComponent(sector)]);
     }
     if (year) {
       setSelectedYears([year]);
     }
+    if (query) {
+      setSearchTerm(decodeURIComponent(query)); // Set searchTerm from URL query
+    }
     setCurrentPage(1);
   }, [location.search]);
 
+  // Fetch data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -47,9 +54,9 @@ const MetadataPage = () => {
           getSectors()
         ]);
 
-        console.log("Fetched organizations:", organizations); // Debug: Log raw API response
-        console.log("Fetched datasets:", datasets); // Debug: Log datasets
-        console.log("Fetched sectors:", sectors); // Debug: Log sectors
+        console.log("Fetched organizations:", organizations);
+        console.log("Fetched datasets:", datasets);
+        console.log("Fetched sectors:", sectors);
 
         setData({
           datasets: datasets || [],
@@ -110,18 +117,18 @@ const MetadataPage = () => {
   );
 
   const toggleOrg = (org) => {
-    console.log("Toggling organization:", org); // Debug: Log clicked organization
-    console.log("Current selectedOrgs:", selectedOrgs); // Debug: Log current state
+    console.log("Toggling organization:", org);
+    console.log("Current selectedOrgs:", selectedOrgs);
     setSelectedOrgs(prev => {
       const newSelected = prev.includes(org) ? prev.filter(o => o !== org) : [...prev, org];
-      console.log("New selectedOrgs:", newSelected); // Debug: Log updated state
+      console.log("New selectedOrgs:", newSelected);
       return newSelected;
     });
     setCurrentPage(1);
   };
 
   const toggleYear = (year) => {
-    console.log("Toggling year:", year); // Debug: Log clicked year
+    console.log("Toggling year:", year);
     setSelectedYears(prev =>
       prev.includes(year) ? prev.filter(y => y !== year) : [...prev, year]
     );
@@ -129,7 +136,7 @@ const MetadataPage = () => {
   };
 
   const toggleSector = (sector) => {
-    console.log("Toggling sector:", sector); // Debug: Log clicked sector
+    console.log("Toggling sector:", sector);
     setSelectedSectors(prev =>
       prev.includes(sector) ? prev.filter(s => s !== sector) : [...prev, sector]
     );
@@ -262,7 +269,6 @@ const MetadataPage = () => {
                   </button>
                 </div>
 
-                {/* Year Filter (Moved Above Organization) */}
                 <div className="mb-6">
                   <h4 className="font-medium text-[#02033b] mb-3">Tahun</h4>
                   <div className="grid grid-cols-2 gap-2">
@@ -276,18 +282,12 @@ const MetadataPage = () => {
                             id={`year-${year}`}
                             className="w-4 h-4 rounded border-gray-300 text-[#3a9ec9] focus:ring-[#3a9ec9]"
                             checked={selectedYears.includes(String(year))}
-                            onChange={() => {
-                              console.log(`Checkbox for year ${year} clicked`); // Debug: Log click
-                              toggleYear(String(year));
-                            }}
+                            onChange={() => toggleYear(String(year))}
                           />
                           <label
                             htmlFor={`year-${year}`}
                             className="ml-2 text-gray-700 text-sm hover:text-[#02033b] cursor-pointer transition-colors"
-                            onClick={() => {
-                              console.log(`Label for year ${year} clicked`); // Debug: Log label click
-                              toggleYear(String(year));
-                            }}
+                            onClick={() => toggleYear(String(year))}
                           >
                             {year}
                           </label>
@@ -297,7 +297,6 @@ const MetadataPage = () => {
                   </div>
                 </div>
 
-                {/* Organization Filter (Moved Below Year) */}
                 <div className="mb-6">
                   <h4 className="font-medium text-[#02033b] mb-3">Organisasi</h4>
                   <div className="relative mb-3">
@@ -321,18 +320,12 @@ const MetadataPage = () => {
                             id={`org-${org.id}`}
                             className="w-4 h-4 rounded border-gray-300 text-[#3a9ec9] focus:ring-[#3a9ec9]"
                             checked={selectedOrgs.includes(org.name)}
-                            onChange={() => {
-                              console.log(`Checkbox for ${org.name} clicked`); // Debug: Log click
-                              toggleOrg(org.name);
-                            }}
+                            onChange={() => toggleOrg(org.name)}
                           />
                           <label
                             htmlFor={`org-${org.id}`}
                             className="ml-2 text-gray-700 text-sm hover:text-[#02033b] cursor-pointer transition-colors"
-                            onClick={() => {
-                              console.log(`Label for ${org.name} clicked`); // Debug: Log label click
-                              toggleOrg(org.name);
-                            }}
+                            onClick={() => toggleOrg(org.name)}
                           >
                             {org.name || "Unknown"}
                           </label>
@@ -342,7 +335,6 @@ const MetadataPage = () => {
                   </div>
                 </div>
 
-                {/* Sector Filter */}
                 <div className="mb-6">
                   <h4 className="font-medium text-[#02033b] mb-3">Sektor</h4>
                   <div className="max-h-60 overflow-y-auto pr-2 space-y-2">
@@ -356,18 +348,12 @@ const MetadataPage = () => {
                             id={`sector-${sector.id}`}
                             className="w-4 h-4 rounded border-gray-300 text-[#3a9ec9] focus:ring-[#3a9ec9]"
                             checked={selectedSectors.includes(sector.name)}
-                            onChange={() => {
-                              console.log(`Checkbox for sector ${sector.name} clicked`); // Debug: Log click
-                              toggleSector(sector.name);
-                            }}
+                            onChange={() => toggleSector(sector.name)}
                           />
                           <label
                             htmlFor={`sector-${sector.id}`}
                             className="ml-2 text-gray-700 text-sm hover:text-[#02033b] cursor-pointer transition-colors"
-                            onClick={() => {
-                              console.log(`Label for sector ${sector.name} clicked`); // Debug: Log label click
-                              toggleSector(sector.name);
-                            }}
+                            onClick={() => toggleSector(sector.name)}
                           >
                             {sector.name || "Unknown"}
                           </label>
